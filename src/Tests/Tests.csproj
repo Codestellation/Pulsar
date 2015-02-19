@@ -39,6 +39,7 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="Cron\SecondsFieldTests.cs" />
     <Compile Include="ScratchPad.cs" />
     <None Include="App.config" />
     <None Include="packages.config" />
@@ -50,7 +51,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Cron\" />
+    <ProjectReference Include="..\Pulsar\Pulsar.csproj">
+      <Project>{E47E16D1-1ED6-455C-9B29-AFE50A0D19BF}</Project>
+      <Name>Pulsar</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

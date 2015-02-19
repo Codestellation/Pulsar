@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace Codestellation.Pulsar.Tests
 {
@@ -8,7 +9,9 @@ namespace Codestellation.Pulsar.Tests
         [Test]
         public void Run_my_thought()
         {
-            
+            Console.WriteLine(Convert.ToInt32('0'));
+
+            Console.WriteLine(Convert.ToInt32('0'));
         }
     }
 }
