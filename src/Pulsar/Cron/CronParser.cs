@@ -72,5 +72,25 @@ namespace Codestellation.Pulsar.Cron
             }
             return values;
         }
+
+        public static bool IsLastDayOfMonth(string token)
+        {
+            return CompareTokenIgnoreCase(token, CronSymbols.Last.ToString());
+        }
+
+        public static bool IsWeekday(string token)
+        {
+            return CompareTokenIgnoreCase(token, CronSymbols.Weekday.ToString());
+        }
+
+        public static bool IsLastWeekday(string token)
+        {
+            return CompareTokenIgnoreCase(token, CronSymbols.Last + CronSymbols.Weekday.ToString());
+        }
+
+        private static bool CompareTokenIgnoreCase(string candidate, string ethalon)
+        {
+            return candidate.Equals(ethalon, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Codestellation.Pulsar.Cron;
 using NUnit.Framework;
 
@@ -65,6 +66,57 @@ namespace Codestellation.Pulsar.Tests.Cron
             var expected = new[] { 10, 20, 21, 22, 25 };
 
             CollectionAssert.AreEqual(expected, values);
+        }
+        
+        [TestCase(1, 31)]
+        [TestCase(2, 29)]
+        [TestCase(3, 31)]
+        [TestCase(4, 30)]
+        [TestCase(5, 31)]
+        [TestCase(6, 30)]
+        [TestCase(7, 31)]
+        [TestCase(8, 31)]
+        [TestCase(9, 30)]
+        [TestCase(10, 31)]
+        [TestCase(11, 30)]
+        [TestCase(12, 31)]
+        public void Can_parse_last_day(int month, int lastDay)
+        {
+            var date = new DateTime(2012, month, 1);
+
+            var field = DayOfMonthField.Parse("L");
+
+            var closestDay = field.GetClosestTo(date);
+
+            Assert.That(closestDay, Is.EqualTo(lastDay));
+        }       
+        
+        [TestCase(1, 2)]
+        [TestCase(7, 9)]
+        [TestCase(10, 10)]
+        [TestCase(28, -1)]
+        public void Can_parse_week_day(int day, int lastDay)
+        {
+            var date = new DateTime(2015, 2, day);
+
+            var field = DayOfMonthField.Parse("W");
+
+            var closestDay = field.GetClosestTo(date);
+
+            Assert.That(closestDay, Is.EqualTo(lastDay));
+        }
+        
+        [TestCase(1, 27)]
+        [TestCase(28, -1)]
+        public void Can_parse_last_week_day(int day, int lastDay)
+        {
+            var date = new DateTime(2015, 2, day);
+
+            var field = DayOfMonthField.Parse("LW");
+
+            var closestDay = field.GetClosestTo(date);
+
+            Assert.That(closestDay, Is.EqualTo(lastDay));
         }
     }
 }
