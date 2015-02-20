@@ -5,11 +5,11 @@ namespace Codestellation.Pulsar.Cron
 {
     public class TimeField
     {
-        private readonly IEnumerable<int> _values;
+        private readonly List<int> _values;
 
         private TimeField(IEnumerable<int> values)
         {
-            _values = values;
+            _values = new List<int>(values);
         }
 
         public static TimeField ParseSeconds(string seconds)
@@ -72,6 +72,11 @@ namespace Codestellation.Pulsar.Cron
                 var index = 0;
                 return new[] { CronParser.ParseNumber(token, ref index, min, max) };
             }
+        }
+
+        public int Nearest(int hour)
+        {
+            return _values.Find(x => hour <= x);
         }
     }
 }
