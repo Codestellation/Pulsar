@@ -41,6 +41,7 @@
     </Compile>
     <Compile Include="Cron\CronParser.cs" />
     <Compile Include="Cron\CronSymbols.cs" />
+    <Compile Include="Cron\DayOfMonthField.cs" />
     <Compile Include="Cron\TimeField.cs" />
     <None Include="App.config" />
   </ItemGroup>

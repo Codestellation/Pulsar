@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Codestellation.Pulsar.Cron
 {
@@ -29,6 +31,46 @@ namespace Codestellation.Pulsar.Cron
         private static int ParseDigit(char value)
         {
             return Convert.ToInt32(value) - 48;
+        }
+
+        public static bool IsRange(string token)
+        {
+            return token.Contains(CronSymbols.Range.ToString());
+        }
+
+        public static IEnumerable<int> ParseRange(string token, int min, int max)
+        {
+            var values = new List<int>();
+            int index = 0;
+
+            int initial = ParseNumber(token, ref index, min, max);
+
+            index++;
+            var final = ParseNumber(token, ref index, min, max);
+            values.AddRange(Enumerable.Range(initial, final - initial + 1));
+            return values;
+        }
+
+        public static bool IsIncrement(string token)
+        {
+            return token.Contains(CronSymbols.Increment);
+        }
+
+        public static IEnumerable<int> ParseIncrement(string token, int min, int max)
+        {
+            var values = new List<int>();
+            int index = 0;
+
+            int initial = ParseNumber(token, ref index, min, max);
+
+            index++;
+            var increment = ParseNumber(token, ref index, min, max);
+
+            for (int i = initial; i <= max; i += increment)
+            {
+                values.Add(i);
+            }
+            return values;
         }
     }
 }
