@@ -59,41 +59,19 @@ namespace Codestellation.Pulsar.Cron
 
         private static IEnumerable<int> ParseToken(string token, int min, int max)
         {
-            var values = new List<int>();
-            int index = 0;
-
-            int initial = CronParser.ParseNumber(token, ref index, min, max);
-
-            var theOnlyValue = token.Length == index;
-            if (theOnlyValue)
+            if (CronParser.IsRange(token))
             {
-                values.Add(initial);
+                return CronParser.ParseRange(token, min, max);
             }
-
-            var hasRange = index < token.Length && token[index] == CronSymbols.Range;
-            
-            if (hasRange)
+            else if (CronParser.IsIncrement(token))
             {
-                index++;
-                var final = CronParser.ParseNumber(token, ref index, min, max);
-                values.AddRange(Enumerable.Range(initial, final-initial+1));
+                return CronParser.ParseIncrement(token, min, max);
             }
-
-            var hasIncrement = index < token.Length && token[index] == CronSymbols.Increment;
-            if (hasIncrement)
+            else
             {
-                index++;
-                var increment = CronParser.ParseNumber(token, ref index, min, max);
-
-                for (int i = initial; i <= max; i += increment)
-                {
-                    values.Add(i);
-                }
+                var index = 0;
+                return new[] { CronParser.ParseNumber(token, ref index, min, max) };
             }
-
-            return values;
         }
-
-        
     }
 }

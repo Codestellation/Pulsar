@@ -42,8 +42,6 @@ namespace Codestellation.Pulsar.Cron
 
         private static IEnumerable<int> ParseToken(string token, int min, int max)
         {
-            
-
             if (CronParser.IsRange(token))
             {
                 return CronParser.ParseRange(token, min, max);
