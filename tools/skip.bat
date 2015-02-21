@@ -1,2 +1,2 @@
-git update-index --assume-unchanged Tests/ScratchPad.cs
-git update-index --assume-unchanged SolutionVersion.cs
+git update-index --assume-unchanged ../src/Tests/ScratchPad.cs
+git update-index --assume-unchanged ../src/SolutionVersion.cs
