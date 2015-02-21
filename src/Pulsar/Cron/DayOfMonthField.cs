@@ -67,7 +67,7 @@ namespace Codestellation.Pulsar.Cron
 
         private static int FromList(DayOfMonthField field, DateTime point)
         {
-            return field._values.Find(x => x > point.Day);
+            return field._values.Find(x => x >= point.Day);
         }
 
         private static int Weekday(DayOfMonthField field, DateTime point)

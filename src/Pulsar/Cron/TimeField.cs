@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Codestellation.Pulsar.Cron
 {
-    public class TimeField
+    public class TimeField : ICronField
     {
         private readonly List<int> _values;
 
@@ -12,21 +13,25 @@ namespace Codestellation.Pulsar.Cron
             _values = new List<int>(values);
         }
 
-        public static TimeField ParseSeconds(string seconds)
+        public static TimeField ParseSeconds(string second)
         {
-            return Parse(seconds, 0, 59);
+            return Parse(second, 0, 59);
         }
         
-        public static TimeField ParseMinutes(string minutes)
+        public static TimeField ParseMinutes(string minute)
         {
-            return Parse(minutes, 0, 59);
+            return Parse(minute, 0, 59);
         }
 
-        public static TimeField ParseHours(string hours)
+        public static TimeField ParseHours(string hour)
         {
-            return Parse(hours, 0, 23);
+            return Parse(hour, 0, 23);
         }
 
+        public static TimeField ParseMonth(string month)
+        {
+            return Parse(month, 1, 12);
+        }
 
         private static TimeField Parse(string timeToken, int min, int max)
         {
@@ -77,6 +82,11 @@ namespace Codestellation.Pulsar.Cron
         public int Nearest(int hour)
         {
             return _values.Find(x => hour <= x);
+        }
+
+        public int GetClosestTo(DateTime point)
+        {
+            return _values.Find(x => point.Month <= x);
         }
     }
 }
