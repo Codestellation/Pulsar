@@ -86,9 +86,9 @@ namespace Codestellation.Pulsar.Tests.Cron
 
             var field = DayOfMonthField.Parse("L");
 
-            var closestDay = field.GetClosestTo(date);
+            var closestDay = field.ShouldFire(date);
 
-            Assert.That(closestDay, Is.EqualTo(lastDay));
+            Assert.That(closestDay, Is.True);
         }       
         
         [TestCase(1, 2)]
@@ -101,22 +101,22 @@ namespace Codestellation.Pulsar.Tests.Cron
 
             var field = DayOfMonthField.Parse("W");
 
-            var closestDay = field.GetClosestTo(date);
+            var closestDay = field.ShouldFire(date);
 
-            Assert.That(closestDay, Is.EqualTo(lastDay));
+            Assert.That(closestDay, Is.True);
         }
         
         [TestCase(1, 27)]
         [TestCase(28, -1)]
         public void Can_parse_last_week_day(int day, int lastDay)
         {
-            var date = new DateTime(2015, 2, day);
+            var date = new DateTime(2015, 2, lastDay);
 
             var field = DayOfMonthField.Parse("LW");
 
-            var closestDay = field.GetClosestTo(date);
+            var closestDay = field.ShouldFire(date);
 
-            Assert.That(closestDay, Is.EqualTo(lastDay));
+            Assert.That(closestDay, Is.True);
         }
     }
 }

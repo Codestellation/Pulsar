@@ -88,5 +88,10 @@ namespace Codestellation.Pulsar.Cron
         {
             return _values.Find(x => point.Month <= x);
         }
+
+        public bool ShouldFire(DateTime currentPoint)
+        {
+            return _values.Contains(currentPoint.Month);
+        }
     }
 }

@@ -4,15 +4,15 @@ using System.Linq;
 
 namespace Codestellation.Pulsar.Cron
 {
-    public class DayOfMonthField : ICronField
+    public class DayOfMonthField
     {
-        private readonly NearestSelector _selector;
+        private readonly DayOfMonthChecker _selector;
 
-        private delegate int NearestSelector(DayOfMonthField field, DateTime point);
+        private delegate bool DayOfMonthChecker(DayOfMonthField field, DateTime point);
 
         private readonly List<int> _values;
 
-        private DayOfMonthField(NearestSelector selector)
+        private DayOfMonthField(DayOfMonthChecker selector)
         {
             _selector = selector;
         }
@@ -65,45 +65,31 @@ namespace Codestellation.Pulsar.Cron
             return new DayOfMonthField(values);
         }
 
-        private static int FromList(DayOfMonthField field, DateTime point)
+        private static bool FromList(DayOfMonthField field, DateTime point)
         {
-            return field._values.Find(x => x >= point.Day);
+            return field._values.Contains(point.Day);
         }
 
-        private static int Weekday(DayOfMonthField field, DateTime point)
+        private static bool Weekday(DayOfMonthField field, DateTime point)
         {
-            var day = point;
-            while (day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday)
+            switch (point.DayOfWeek)
             {
-                day = day.AddDays(1);
+                default:
+                    return true;
+                case DayOfWeek.Saturday:
+                case DayOfWeek.Sunday:
+                    return false;
             }
-            if (day.Month != point.Month)
-            {
-                return -1;
-            }
-
-            return day.Day;
         }
 
-        private static int LastDayOfMonth(DayOfMonthField field, DateTime point)
+        private static bool LastDayOfMonth(DayOfMonthField field, DateTime point)
         {
-            return CronDateHelper.GetLastDayOfMonth(point.Year, point.Month);
+            return point.Day ==  CronDateHelper.GetLastDayOfMonth(point);
         }
 
-        private static int LastWeekday(DayOfMonthField field, DateTime point)
+        private static bool LastWeekday(DayOfMonthField field, DateTime point)
         {
-            var lastDay = CronDateHelper.GetLastDayOfMonth(point.Year, point.Month);
-            var day = new DateTime(point.Year, point.Month, lastDay);
-            
-            while (day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday)
-            {
-                day = day.AddDays(-1);
-            }
-            if (day.Day < point.Day)
-            {
-                return -1;
-            }
-            return day.Day;
+            return Weekday(field, point) && LastDayOfMonth(field, point);
         }
 
         private static IEnumerable<int> ParseToken(string token, int min, int max)
@@ -129,7 +115,8 @@ namespace Codestellation.Pulsar.Cron
             return _values.Where(x => x <= maxValue).ToArray();
         }
 
-        public int GetClosestTo(DateTime point)
+
+        public bool ShouldFire(DateTime point)
         {
             return _selector(this, point);
         }
