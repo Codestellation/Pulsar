@@ -8,7 +8,7 @@ namespace Codestellation.Pulsar.Cron
     {
         private readonly List<int> _values;
 
-        private TimeField(IEnumerable<int> values)
+        public TimeField(IEnumerable<int> values)
         {
             _values = new List<int>(values);
         }

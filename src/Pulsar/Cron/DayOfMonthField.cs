@@ -36,7 +36,7 @@ namespace Codestellation.Pulsar.Cron
                 return new DayOfMonthField(allValues);
             }
 
-            if (CronParser.IsLastDayOfMonth(dayOfMonth))
+            if (CronParser.IsLast(dayOfMonth))
             {
                 return new DayOfMonthField(LastDayOfMonth);
             }
@@ -87,12 +87,12 @@ namespace Codestellation.Pulsar.Cron
 
         private static int LastDayOfMonth(DayOfMonthField field, DateTime point)
         {
-            return GetMaxValue(point.Year, point.Month);
+            return CronDateHelper.GetLastDayOfMonth(point.Year, point.Month);
         }
 
         private static int LastWeekday(DayOfMonthField field, DateTime point)
         {
-            var lastDay = GetMaxValue(point.Year, point.Month);
+            var lastDay = CronDateHelper.GetLastDayOfMonth(point.Year, point.Month);
             var day = new DateTime(point.Year, point.Month, lastDay);
             
             while (day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday)
@@ -125,35 +125,8 @@ namespace Codestellation.Pulsar.Cron
 
         public IEnumerable<int> GetValues(int year, int month)
         {
-            var maxValue = GetMaxValue(year, month);
+            var maxValue = CronDateHelper.GetLastDayOfMonth(year, month);
             return _values.Where(x => x <= maxValue).ToArray();
-        }
-
-        private static int GetMaxValue(int year, int month)
-        {
-            int maxValue = 0;
-            switch (month)
-            {
-                case 1:
-                case 3:
-                case 5:
-                case 7:
-                case 8:
-                case 10:
-                case 12:
-                    maxValue = 31;
-                    break;
-                case 4:
-                case 6:
-                case 9:
-                case 11:
-                    maxValue = 30;
-                    break;
-                case 2:
-                    maxValue = DateTime.IsLeapYear(year) ? 29 : 28;
-                    break;
-            }
-            return maxValue;
         }
 
         public int GetClosestTo(DateTime point)

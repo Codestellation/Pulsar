@@ -39,10 +39,13 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="Cron\CronCalendar.cs" />
+    <Compile Include="Cron\CronDateHelper.cs" />
     <Compile Include="Cron\CronExpression.cs" />
     <Compile Include="Cron\CronParser.cs" />
     <Compile Include="Cron\CronSymbols.cs" />
     <Compile Include="Cron\DayOfMonthField.cs" />
+    <Compile Include="Cron\DayOfWeekField.cs" />
     <Compile Include="Cron\ICronField.cs" />
     <Compile Include="Cron\TimeField.cs" />
     <None Include="App.config" />

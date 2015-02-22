@@ -9,10 +9,11 @@ namespace Codestellation.Pulsar.Cron
         private TimeField _hours;
         private DayOfMonthField _dayOfMonth;
         private TimeField _month;
+        private DayOfWeekField _dayOfWeek;
 
         public CronExpression(string value)
         {
-            var tokens = value.Split(' ');
+            var tokens = value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (tokens.Length < 6 || 7 < tokens.Length)
             {
@@ -25,23 +26,12 @@ namespace Codestellation.Pulsar.Cron
 
             _dayOfMonth = DayOfMonthField.Parse(tokens[3]);
             _month = TimeField.ParseMonth(tokens[4]);
-
+            _dayOfWeek = DayOfWeekField.Parse(tokens[5]);
         }
 
         public DateTime? NearestFrom(DateTime startingPoint)
         {
-            var candidate = startingPoint.Date;
-            
-            int year = startingPoint.Year;
-            int month = _month.GetClosestTo(candidate);
-            int day = _dayOfMonth.GetClosestTo(candidate);
-
-            int hour = _hours.Nearest(startingPoint.Hour);
-            int minute = _minutes.Nearest(startingPoint.Minute);
-            int second = _seconds.Nearest(startingPoint.Second);
-
-
-            return new DateTime(year, month, day, hour, minute, second);
+            return null;
         }
     }
 }

@@ -41,6 +41,7 @@
     </Compile>
     <Compile Include="Cron\CronExpressionTests.cs" />
     <Compile Include="Cron\DayOfMonthFieldTests.cs" />
+    <Compile Include="Cron\DayOfWeekFieldTests.cs" />
     <Compile Include="Cron\TimeFieldTests.cs" />
     <Compile Include="ScratchPad.cs" />
     <None Include="App.config" />

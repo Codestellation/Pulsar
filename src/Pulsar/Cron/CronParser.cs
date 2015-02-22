@@ -73,7 +73,7 @@ namespace Codestellation.Pulsar.Cron
             return values;
         }
 
-        public static bool IsLastDayOfMonth(string token)
+        public static bool IsLast(string token)
         {
             return CompareTokenIgnoreCase(token, CronSymbols.Last.ToString());
         }
@@ -91,6 +91,16 @@ namespace Codestellation.Pulsar.Cron
         private static bool CompareTokenIgnoreCase(string candidate, string ethalon)
         {
             return candidate.Equals(ethalon, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static bool IsAllVallues(string token)
+        {
+            return token.Contains(CronSymbols.AllValues);
+        }
+
+        public static bool IsNotSpecifed(string token)
+        {
+            return token.Contains(CronSymbols.NotSpecified);
         }
     }
 }
