@@ -24,6 +24,8 @@ namespace Codestellation.Pulsar.Cron
             _values = new List<int>(allValues);
         }
 
+        public bool NotSpecified { get; private set; }
+
         public static DayOfMonthField Parse(string dayOfMonth)
         {
             const int min = 1;
