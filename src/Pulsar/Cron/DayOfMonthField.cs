@@ -24,6 +24,12 @@ namespace Codestellation.Pulsar.Cron
             _values = new List<int>(allValues);
         }
 
+        private DayOfMonthField()
+        {
+            NotSpecified = true;
+            _selector = delegate { return false; };
+        }
+
         public bool NotSpecified { get; private set; }
 
         public static DayOfMonthField Parse(string dayOfMonth)
@@ -31,7 +37,11 @@ namespace Codestellation.Pulsar.Cron
             const int min = 1;
             const int max = 31;
 
-            if (dayOfMonth[0] == CronSymbols.AllValues)
+            if (CronParser.IsNotSpecifed(dayOfMonth))
+            {
+                return new DayOfMonthField();
+            }
+            if (CronParser.IsAllVallues(dayOfMonth))
             {
                 var allValues = new List<int>(max);
                 allValues.AddRange(Enumerable.Range(min, max));

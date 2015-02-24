@@ -118,5 +118,19 @@ namespace Codestellation.Pulsar.Tests.Cron
 
             Assert.That(closestDay, Is.EqualTo(expected));
         }
+        
+        
+        [Test]
+        public void Can_parse_not_specified()
+        {
+            var date = new DateTime(2015, 2, 3);
+
+            var field = DayOfMonthField.Parse("?");
+
+            var shouldFire = field.ShouldFire(date);
+
+            Assert.That(shouldFire, Is.False);
+            Assert.That(field.NotSpecified, Is.True);
+        }
     }
 }
