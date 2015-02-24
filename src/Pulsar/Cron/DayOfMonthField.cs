@@ -91,7 +91,15 @@ namespace Codestellation.Pulsar.Cron
 
         private static bool LastWeekday(DayOfMonthField field, DateTime point)
         {
-            return Weekday(field, point) && LastDayOfMonth(field, point);
+            var lastDay = CronDateHelper.GetLastDayOfMonth(point.Year, point.Month);
+            var candidate = new DateTime(point.Year, point.Month, lastDay);
+
+            while (!Weekday(field, candidate))
+            {
+                candidate = candidate.AddDays(-1);
+            }
+
+            return point.Day == candidate.Day;
         }
 
         private static IEnumerable<int> ParseToken(string token, int min, int max)

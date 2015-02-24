@@ -82,7 +82,7 @@ namespace Codestellation.Pulsar.Tests.Cron
         [TestCase(12, 31)]
         public void Can_parse_last_day(int month, int lastDay)
         {
-            var date = new DateTime(2012, month, 1);
+            var date = new DateTime(2012, month, lastDay);
 
             var field = DayOfMonthField.Parse("L");
 
@@ -91,11 +91,11 @@ namespace Codestellation.Pulsar.Tests.Cron
             Assert.That(closestDay, Is.True);
         }       
         
-        [TestCase(1, 2)]
-        [TestCase(7, 9)]
-        [TestCase(10, 10)]
-        [TestCase(28, -1)]
-        public void Can_parse_week_day(int day, int lastDay)
+        [TestCase(1, false)]
+        [TestCase(7, false)]
+        [TestCase(10, true)]
+        [TestCase(28, false)]
+        public void Can_parse_week_day(int day, bool expected)
         {
             var date = new DateTime(2015, 2, day);
 
@@ -103,20 +103,20 @@ namespace Codestellation.Pulsar.Tests.Cron
 
             var closestDay = field.ShouldFire(date);
 
-            Assert.That(closestDay, Is.True);
+            Assert.That(closestDay, Is.EqualTo(expected));
         }
         
-        [TestCase(1, 27)]
-        [TestCase(28, -1)]
-        public void Can_parse_last_week_day(int day, int lastDay)
+        [TestCase(27, true)]
+        [TestCase(28, false)]
+        public void Can_parse_last_week_day(int day, bool expected)
         {
-            var date = new DateTime(2015, 2, lastDay);
+            var date = new DateTime(2015, 2, day);
 
             var field = DayOfMonthField.Parse("LW");
 
             var closestDay = field.ShouldFire(date);
 
-            Assert.That(closestDay, Is.True);
+            Assert.That(closestDay, Is.EqualTo(expected));
         }
     }
 }
