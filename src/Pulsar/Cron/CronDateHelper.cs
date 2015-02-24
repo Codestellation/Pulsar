@@ -35,5 +35,18 @@ namespace Codestellation.Pulsar.Cron
             }
             return maxValue;
         }
+
+        public static DateTime First(DayOfWeek dayOfWeek, DateTime date)
+        {
+            for (int day = 1; day <= 7; day++)
+            {
+                var candidate = new DateTime(date.Year, date.Month, day); //first day of month
+                if (candidate.DayOfWeek == dayOfWeek)
+                {
+                    return candidate;
+                }
+            }
+            throw new InvalidOperationException("This is impossible case");
+        }
     }
 }

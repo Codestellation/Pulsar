@@ -7,82 +7,92 @@ namespace Codestellation.Pulsar.Cron
 {
     public class DayOfWeekField
     {
-        private readonly bool _lastDay;
-        public IEnumerable Values { get; private set; }
+        private readonly SortedSet<int> _values;
+        private readonly List<Func<DateTime, bool>> _selectors;
+
+
         public bool NotSpecified { get; private set; }
 
-        private DayOfWeekField(bool notSpecified = false, bool lastDay = false)
+        public IEnumerable<int> Values
         {
-            _lastDay = lastDay;
-            NotSpecified = notSpecified;
+            get { return _values; }
         }
 
-        private DayOfWeekField(IEnumerable<int> values)
+        public DayOfWeekField(string token)
         {
-            Values = values.ToList();
+
+
+            _values = new SortedSet<int>();
+            _selectors = new List<Func<DateTime, bool>> { HasValue };
+
+            if (CronParser.IsNotSpecifed(token))
+            {
+                NotSpecified = true;
+                return;
+            }
+
+            var subTokens = token.Split(new []{CronSymbols.Comma}, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var subToken in subTokens)
+            {
+                ParseToken(subToken);
+            }
         }
 
-        public static DayOfWeekField Parse(string token)
+        private bool HasValue(DateTime arg)
+        {
+            return _values.Contains((int)arg.DayOfWeek);
+        }
+
+        private void ParseToken(string token)
         {
             const int sunday = 1;
             const int saturday = 7;
 
-            if (CronParser.IsNotSpecifed(token))
-            {
-                return new DayOfWeekField(notSpecified:true);
-            }
-
-            if (CronParser.IsLast(token))
-            {
-                return new DayOfWeekField(lastDay:true);
-            }
-
-            if (CronParser.IsAllVallues(token))
-            {
-                var allValues = new List<int>(saturday);
-                allValues.AddRange(Enumerable.Range(sunday, saturday));
-                return new DayOfWeekField(allValues);
-            }
-
-            var subTokens = token.Split(CronSymbols.Comma);
-            var values = new SortedSet<int>();
-
-            foreach (var subToken in subTokens)
-            {
-                var subValues = ParseToken(subToken, sunday, saturday);
-                foreach (var value in subValues)
-                {
-                    values.Add(value);
-                }
-            }
-
-            return new DayOfWeekField(values);
-        }
-
-        private static IEnumerable<int> ParseToken(string token, int min, int max)
-        {
             if (CronParser.IsRange(token))
             {
-                return CronParser.ParseRange(token, min, max);
+                _values.AddRange(CronParser.ParseRange(token, sunday, saturday));
+                return;
             }
-            else if (CronParser.IsIncrement(token))
+            if (CronParser.IsIncrement(token))
             {
-                return CronParser.ParseIncrement(token, min, max);
+                _values.AddRange(CronParser.ParseIncrement(token, sunday, saturday));
+                return;
             }
-            else
+            if (CronParser.IsNumberedWeekday(token))
+            {
+                _selectors.Add(CronParser.ParseNumberedWeekday(token));
+                return;
+            }
+            if (CronParser.IsLast(token))
+            {
+                _selectors.Add(IsLastDay);
+                return;
+            }
+            if (CronParser.IsAllVallues(token))
+            {
+                _values.AddRange(Enumerable.Range(sunday, saturday));
+                return;
+            }
+            if(CronParser.IsNumber(token))
             {
                 var index = 0;
-                return new[] { CronParser.ParseNumber(token, ref index, min, max) };
+                _values.Add(CronParser.ParseNumber(token, ref index, sunday, saturday));
+                return;
             }
+
+            var message = string.Format("Could not parse value '{0}'", token);
+            throw new FormatException(message);
         }
 
         public bool ShouldFire(DateTime date)
         {
-            if (date.Day == CronDateHelper.GetLastDayOfMonth(date))
-            {
-                return true;
-            }
-            return false;
+            return _selectors.Any(selector => selector(date));
+        }
+
+        private bool IsLastDay(DateTime date)
+        {
+            return date.DayOfWeek == DayOfWeek.Saturday;
         }
     }
 }

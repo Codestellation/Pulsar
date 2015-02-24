@@ -11,7 +11,7 @@ namespace Codestellation.Pulsar.Tests.Cron
         [Test]
         public void Should_parse_simple_values()
         {
-            var field = DayOfWeekField.Parse("1-3,6/1");
+            var field = new DayOfWeekField("1-3,6/1");
             Assert.That(field.NotSpecified, Is.False);
             CollectionAssert.AreEqual(new[] { 1,2,3,6,7 }, field.Values);
         }
@@ -19,7 +19,7 @@ namespace Codestellation.Pulsar.Tests.Cron
         [Test]
         public void Should_parse_not_specified()
         {
-            var field = DayOfWeekField.Parse("?");
+            var field = new DayOfWeekField("?");
 
             Assert.That(field.NotSpecified, Is.True);
         }
@@ -27,11 +27,23 @@ namespace Codestellation.Pulsar.Tests.Cron
         [Test]
         public void Should_parse_simple_last_value()
         {
-            var field = DayOfWeekField.Parse("L");
+            var field = new DayOfWeekField("L");
             var date = new DateTime(2015, 2, 28);
             
             Assert.That(field.ShouldFire(date), Is.True);
             
+            Assert.That(field.NotSpecified, Is.False);
+        }
+        
+        [TestCase(23, true)]
+        [TestCase(28, false)]
+        public void Should_parse_simple_numbered_weekday(int day, bool expected)
+        {
+            var field = new DayOfWeekField("2#4"); //4th monday
+            var date = new DateTime(2015, 2, day);
+
+            Assert.That(field.ShouldFire(date), Is.EqualTo(expected));
+
             Assert.That(field.NotSpecified, Is.False);
         }
     }

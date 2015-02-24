@@ -9,6 +9,6 @@
         public static readonly char Increment = '/';
         public static readonly char Last = 'L';
         public static readonly char Weekday = 'W';
-        public static readonly char Number = '#';
+        public static readonly char WeekdayNumber = '#';
     }
 }

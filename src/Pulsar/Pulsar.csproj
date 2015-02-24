@@ -48,6 +48,7 @@
     <Compile Include="Cron\DayOfMonthField.cs" />
     <Compile Include="Cron\DayOfWeekField.cs" />
     <Compile Include="Cron\ICronField.cs" />
+    <Compile Include="Cron\SetExtensions.cs" />
     <Compile Include="Cron\TimeField.cs" />
     <None Include="App.config" />
   </ItemGroup>

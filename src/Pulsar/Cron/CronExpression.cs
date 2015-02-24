@@ -26,7 +26,7 @@ namespace Codestellation.Pulsar.Cron
 
             _dayOfMonth = DayOfMonthField.Parse(tokens[3]);
             _month = TimeField.ParseMonth(tokens[4]);
-            _dayOfWeek = DayOfWeekField.Parse(tokens[5]);
+            _dayOfWeek = new DayOfWeekField(tokens[5]);
         }
 
         public DateTime? NearestFrom(DateTime startingPoint)

@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.Permissions;
 
 namespace Codestellation.Pulsar.Cron
 {
     public static class CronParser
     {
+        public static bool IsNumber(string token)
+        {
+            return token.All(char.IsDigit);
+        }
+
         public static int ParseNumber(string token, ref int index, int min, int max)
         {
             if (char.IsDigit(token[index]))
@@ -100,7 +107,73 @@ namespace Codestellation.Pulsar.Cron
 
         public static bool IsNotSpecifed(string token)
         {
-            return token.Contains(CronSymbols.NotSpecified);
+            if (token.Equals(CronSymbols.NotSpecified.ToString(), StringComparison.Ordinal))
+            {
+                return true;
+            }
+            if (token.Contains(CronSymbols.NotSpecified))
+            {
+                var message = string.Format("Not specified value '?' must be the only value, but was '{0}'", token);
+                throw new FormatException(message);
+            }
+            return false;
+        }
+
+        public static bool IsNumberedWeekday(string token)
+        {
+            return token.Contains(CronSymbols.WeekdayNumber);
+        }
+
+        public static Func<DateTime, bool> ParseNumberedWeekday(string token)
+        {
+            var subtokens = Tokenize(token, CronSymbols.WeekdayNumber);
+
+            var dayOfWeek = ToDayOfWeek(int.Parse(subtokens[0]));
+            var numberOfDay = int.Parse(subtokens[1]);
+
+
+            return date => IsNumberedWeekday(date, dayOfWeek, numberOfDay);
+        }
+
+        private static bool IsNumberedWeekday(DateTime date, DayOfWeek dayOfWeek, int number)
+        {
+            if (date.DayOfWeek != dayOfWeek)
+            {
+                return false;
+            }
+
+            var first = CronDateHelper.First(dayOfWeek, date);
+            var daysToAdd = (number-1)*7;
+            var candidate = first.AddDays(daysToAdd);
+            return candidate.Equals(date.Date);
+        }
+
+        public static string[] Tokenize(string token, char separator)
+        {
+            return token.Split(new[] {separator}, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        public static DayOfWeek ToDayOfWeek(int dayOfWeek)
+        {
+            switch (dayOfWeek)
+            {
+                case 1:
+                    return DayOfWeek.Sunday;
+                case 2:
+                    return DayOfWeek.Monday;
+                case 3:
+                    return DayOfWeek.Tuesday;
+                case 4:
+                    return DayOfWeek.Wednesday;
+                case 5:
+                    return DayOfWeek.Thursday;
+                case 6: 
+                    return DayOfWeek.Friday;
+                case 7:
+                    return DayOfWeek.Saturday;
+            }
+            var message = string.Format("Day of week should be digit between 1 and 7, but was {0}", dayOfWeek);
+            throw new FormatException(message);
         }
     }
 }
