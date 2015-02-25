@@ -40,6 +40,7 @@
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
     <Compile Include="Cron\CronCalendarBuilderTests.cs" />
+    <Compile Include="Cron\CronDayScheduleTests.cs" />
     <Compile Include="Cron\CronExpressionTests.cs" />
     <Compile Include="Cron\CronParserTests.cs" />
     <Compile Include="Cron\DayOfMonthFieldTests.cs" />

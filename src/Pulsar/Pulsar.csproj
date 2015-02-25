@@ -42,6 +42,7 @@
     <Compile Include="Cron\CronCalendar.cs" />
     <Compile Include="Cron\CronCalendarBuilder.cs" />
     <Compile Include="Cron\CronDateHelper.cs" />
+    <Compile Include="Cron\CronDaySchedule.cs" />
     <Compile Include="Cron\CronExpression.cs" />
     <Compile Include="Cron\CronFieldSettings.cs" />
     <Compile Include="Cron\SimpleCronField.cs" />
