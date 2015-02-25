@@ -11,7 +11,7 @@ namespace Codestellation.Pulsar.Tests.Cron
         public void Can_build_calendar()
         {
             var builder = new CronCalendarBuilder()
-                .SetMonth(TimeField.ParseMonth("1,6"))
+                .SetMonth(SimpleCronField.ParseMonth("1,6"))
                 .SetDayOfMonth(DayOfMonthField.Parse("1,15"))
                 .SetDayOfWeek(new DayOfWeekField("?"));
 

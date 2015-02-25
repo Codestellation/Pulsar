@@ -5,11 +5,11 @@ namespace Codestellation.Pulsar.Cron
 {
     public class CronCalendarBuilder
     {
-        private TimeField _month;
+        private SimpleCronField _month;
         private DayOfMonthField _dayOfMonth;
         private DayOfWeekField _dayOfWeek;
 
-        public CronCalendarBuilder SetMonth(TimeField month)
+        public CronCalendarBuilder SetMonth(SimpleCronField month)
         {
             _month = month;
             return this;

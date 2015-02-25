@@ -10,5 +10,6 @@
         public static readonly char Last = 'L';
         public static readonly char Weekday = 'W';
         public static readonly char WeekdayNumber = '#';
+        public static readonly char Space = ' ';
     }
 }
