@@ -25,10 +25,9 @@ namespace Codestellation.Pulsar.Cron
             _minutes = SimpleCronField.ParseMinutes(tokens[1]);
             _hours = SimpleCronField.ParseHours(tokens[2]);
 
-            _dayOfMonth = DayOfMonthField.Parse(tokens[3]);
+            _dayOfMonth = new DayOfMonthField(tokens[3]);
             _month = SimpleCronField.ParseMonth(tokens[4]);
             _dayOfWeek = new DayOfWeekField(tokens[5]);
-
 
             if (tokens.Length == 7)
             {
