@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace Codestellation.Pulsar.Tests.Cron
 {
-    [TestFixture, Ignore]
+    [TestFixture]
     public class CronExpressionTests
     {
         [TestCase(10, 15)] //before 12am - this day
@@ -13,11 +13,11 @@ namespace Codestellation.Pulsar.Tests.Cron
         {
             var datetime = new DateTime(2012, 10, 15).AddHours(hour);
 
-            var expression = new CronExpression("0 0 12 * * ?");
+            var expression = new CronExpression("0 0 10 * * ?");
 
-            var nearest = expression.NearestFrom(datetime);
+            var nearest = expression.NearestAfter(datetime);
 
-            var expected = new DateTime(2012, 10, expecatedDay, 12, 0, 0);
+            var expected = new DateTime(2012, 10, expecatedDay, 10, 0, 0);
 
             Assert.That(nearest.Value, Is.EqualTo(expected));
         }
@@ -29,7 +29,7 @@ namespace Codestellation.Pulsar.Tests.Cron
 
             var expression = new CronExpression("0 0 12 L 3,6 ?");
 
-            var nearest = expression.NearestFrom(datetime);
+            var nearest = expression.NearestAfter(datetime);
 
             var expected = new DateTime(2012,3,31,12,0,0);
 
