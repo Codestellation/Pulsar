@@ -128,10 +128,8 @@ namespace Codestellation.Pulsar.Cron
         {
             var subtokens = Tokenize(token, CronSymbols.WeekdayNumber);
 
-            var dayOfWeek = ToDayOfWeek(int.Parse(subtokens[0]));
+            var dayOfWeek = CronDateHelper.ToDayOfWeek(int.Parse(subtokens[0]));
             var numberOfDay = int.Parse(subtokens[1]);
-
-
             return date => IsNumberedWeekday(date, dayOfWeek, numberOfDay);
         }
 
@@ -153,27 +151,6 @@ namespace Codestellation.Pulsar.Cron
             return token.Split(new[] {separator}, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public static DayOfWeek ToDayOfWeek(int dayOfWeek)
-        {
-            switch (dayOfWeek)
-            {
-                case 1:
-                    return DayOfWeek.Sunday;
-                case 2:
-                    return DayOfWeek.Monday;
-                case 3:
-                    return DayOfWeek.Tuesday;
-                case 4:
-                    return DayOfWeek.Wednesday;
-                case 5:
-                    return DayOfWeek.Thursday;
-                case 6: 
-                    return DayOfWeek.Friday;
-                case 7:
-                    return DayOfWeek.Saturday;
-            }
-            var message = string.Format("Day of week should be digit between 1 and 7, but was {0}", dayOfWeek);
-            throw new FormatException(message);
-        }
+
     }
 }

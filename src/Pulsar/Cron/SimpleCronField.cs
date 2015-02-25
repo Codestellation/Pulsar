@@ -9,15 +9,13 @@ namespace Codestellation.Pulsar.Cron
     /// </summary>
     public class SimpleCronField
     {
-        private readonly int _minValue;
-        private readonly int _maxValue;
+        private readonly CronFieldSettings _settings;
         private readonly SortedSet<int> _values;
         private readonly List<Func<DateTime, bool>> _selectors;
 
-        protected SimpleCronField(string token, int minValue, int maxValue)
+        protected SimpleCronField(string token, CronFieldSettings settings)
         {
-            _minValue = minValue;
-            _maxValue = maxValue;
+            _settings = settings;
             _values = new SortedSet<int>();
             _selectors = new List<Func<DateTime, bool>>();
 
@@ -39,32 +37,32 @@ namespace Codestellation.Pulsar.Cron
             get { return _values; }
         }
 
-        private bool ContainsValue(DateTime arg)
+        private bool ContainsValue(DateTime date)
         {
-            return _values.Contains((int)arg.DayOfWeek);
+            return _values.Contains(_settings.DatePartSelector(date));
         }
 
         protected virtual void ParseToken(string token)
         {
             if (CronParser.IsAllVallues(token))
             {
-                _values.AddRange(Enumerable.Range(_minValue, _maxValue));
+                _values.AddRange(Enumerable.Range(_settings.MinValue, _settings.MaxValue));
                 return;
             }
             if (CronParser.IsRange(token))
             {
-                _values.AddRange(CronParser.ParseRange(token, _minValue, _maxValue));
+                _values.AddRange(CronParser.ParseRange(token, _settings.MinValue, _settings.MaxValue));
                 return;
             }
             if (CronParser.IsIncrement(token))
             {
-                _values.AddRange(CronParser.ParseIncrement(token, _minValue, _maxValue));
+                _values.AddRange(CronParser.ParseIncrement(token, _settings.MinValue, _settings.MaxValue));
                 return;
             }
             if (CronParser.IsNumber(token))
             {
                 var index = 0;
-                _values.Add(CronParser.ParseNumber(token, ref index, _minValue, _maxValue));
+                _values.Add(CronParser.ParseNumber(token, ref index, _settings.MinValue, _settings.MaxValue));
                 return;
             }
 
@@ -95,27 +93,29 @@ namespace Codestellation.Pulsar.Cron
 
         public static SimpleCronField ParseSeconds(string second)
         {
-            return new SimpleCronField(second, 0, 59);
+            return new SimpleCronField(second, CronFieldSettings.Second);
         }
 
         public static SimpleCronField ParseMinutes(string minute)
         {
-            return new SimpleCronField(minute, 0, 59);
+            return new SimpleCronField(minute, CronFieldSettings.Minute);
         }
 
         public static SimpleCronField ParseHours(string hour)
         {
-            return new SimpleCronField(hour, 0, 23);
+            return new SimpleCronField(hour, CronFieldSettings.Hour);
         }
 
         public static SimpleCronField ParseMonth(string month)
         {
-            return new SimpleCronField(month, 1, 12);
+            return new SimpleCronField(month, CronFieldSettings.Month);
         }
 
         public static SimpleCronField ParseYear(string year)
         {
-            return new SimpleCronField(year, 2000, 2100);
+            return new SimpleCronField(year, CronFieldSettings.Year);
         }
+
+
     }
 }

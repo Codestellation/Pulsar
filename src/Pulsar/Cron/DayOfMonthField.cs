@@ -20,7 +20,7 @@ namespace Codestellation.Pulsar.Cron
             }
         }
 
-        public DayOfMonthField(string token) : base(token, MinDay, MaxDay)
+        public DayOfMonthField(string token) : base(token, CronFieldSettings.DayOfMonth)
         {
             if (CronParser.IsNotSpecifed(token))
             {
@@ -43,6 +43,10 @@ namespace Codestellation.Pulsar.Cron
             if (CronParser.IsLastWeekday(token))
             {
                 AddSelector(LastWeekday);
+                return;
+            }
+            if (CronParser.IsNotSpecifed(token))
+            {
                 return;
             }
             base.ParseToken(token);

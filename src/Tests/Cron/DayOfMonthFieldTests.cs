@@ -55,7 +55,7 @@ namespace Codestellation.Pulsar.Tests.Cron
 
             var values = field.Values;
 
-            var expected = new[] { 10, 20, 21, 22, 25 };
+            var expected = new[] { 10, 20, 21, 22, 25, 30 };
 
             CollectionAssert.AreEqual(expected, values);
         }

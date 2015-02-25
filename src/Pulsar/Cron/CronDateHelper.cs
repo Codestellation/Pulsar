@@ -8,7 +8,7 @@ namespace Codestellation.Pulsar.Cron
         {
             return GetLastDayOfMonth(date.Year, date.Month);
         }
-        
+
         public static int GetLastDayOfMonth(int year, int month)
         {
             int maxValue = 0;
@@ -47,6 +47,51 @@ namespace Codestellation.Pulsar.Cron
                 }
             }
             throw new InvalidOperationException("This is impossible case");
+        }
+
+        public static DayOfWeek ToDayOfWeek(int dayOfWeek)
+        {
+            switch (dayOfWeek)
+            {
+                case 1:
+                    return DayOfWeek.Sunday;
+                case 2:
+                    return DayOfWeek.Monday;
+                case 3:
+                    return DayOfWeek.Tuesday;
+                case 4:
+                    return DayOfWeek.Wednesday;
+                case 5:
+                    return DayOfWeek.Thursday;
+                case 6:
+                    return DayOfWeek.Friday;
+                case 7:
+                    return DayOfWeek.Saturday;
+            }
+            var message = string.Format("Day of week should be digit between 1 and 7, but was {0}", dayOfWeek);
+            throw new FormatException(message);
+        }
+
+        public static int ToCronValue(DayOfWeek dayOfWeek)
+        {
+            switch (dayOfWeek)
+            {
+                case DayOfWeek.Sunday:
+                    return 1;
+                case DayOfWeek.Monday:
+                    return 2;
+                case DayOfWeek.Tuesday:
+                    return 3;
+                case DayOfWeek.Wednesday:
+                    return 4;
+                case DayOfWeek.Thursday:
+                    return 5;
+                case DayOfWeek.Friday:
+                    return 6;
+                case DayOfWeek.Saturday:
+                    return 7;
+            }
+            throw new InvalidOperationException("It's impossible");
         }
     }
 }

@@ -5,8 +5,6 @@ namespace Codestellation.Pulsar.Cron
     public class DayOfWeekField : SimpleCronField
     {
         private bool _notSpecified;
-        private const int Sunday = 1;
-        private const int Saturday = 7;
 
         public bool NotSpecified
         {
@@ -19,7 +17,7 @@ namespace Codestellation.Pulsar.Cron
             }
         }
 
-        public DayOfWeekField(string token) : base(token, Sunday, Saturday)
+        public DayOfWeekField(string token) : base(token, CronFieldSettings.DayOfWeed)
         {
             if (CronParser.IsNotSpecifed(token))
             {
