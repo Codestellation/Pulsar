@@ -46,7 +46,7 @@ namespace Codestellation.Pulsar.Cron
         {
             if (CronParser.IsAllVallues(token))
             {
-                _values.AddRange(Enumerable.Range(_settings.MinValue, _settings.MaxValue));
+                _values.AddRange(CronParser.Range(_settings.MinValue, _settings.MaxValue));
                 return;
             }
             if (CronParser.IsRange(token))

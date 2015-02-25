@@ -26,7 +26,7 @@ namespace Codestellation.Pulsar.Tests.Cron
         public void Can_parse_all_value()
         {
             var field = SimpleCronField.ParseSeconds("*");
-            var expected = Enumerable.Range(0, 59);
+            var expected = Enumerable.Range(0, 60);
             CollectionAssert.AreEqual(expected, field.Values);
         }
 

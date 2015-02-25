@@ -54,7 +54,7 @@ namespace Codestellation.Pulsar.Cron
 
             index++;
             var final = ParseNumber(token, ref index, min, max);
-            values.AddRange(Enumerable.Range(initial, final - initial + 1));
+            values.AddRange(Range(initial, final));
             return values;
         }
 
@@ -152,5 +152,12 @@ namespace Codestellation.Pulsar.Cron
         }
 
 
+        public static IEnumerable<int> Range(int start, int end)
+        {
+            for (int range = start; range <= end; range++)
+            {
+                yield return range;
+            }
+        }
     }
 }
