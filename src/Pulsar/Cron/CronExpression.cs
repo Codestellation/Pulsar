@@ -50,31 +50,41 @@ namespace Codestellation.Pulsar.Cron
 
         public DateTime? NearestAfter(DateTime point)
         {
-            var calendar = GetCalendar(point);
-            //TODO: handle next year!
-            foreach (var date in calendar.ScheduledDays)
+            var currentPoint = point;
+            CronCalendar calendar;
+            while (TryGetCalendar(currentPoint, out calendar))
             {
-                foreach (var time in _daySchedule.Values)
+                foreach (var date in calendar.ScheduledDays)
                 {
-                    var candidate = date.Add(time);
-                    if (candidate >= point)
+                    foreach (var time in _daySchedule.Values)
                     {
-                        return candidate;
+                        var candidate = date.Add(time);
+                        if (candidate >= point)
+                        {
+                            return candidate;
+                        }
                     }
                 }
+                currentPoint = currentPoint.AddYears(1);
             }
             return null;
         }
 
-        private CronCalendar GetCalendar(DateTime point)
+        private bool TryGetCalendar(DateTime point, out CronCalendar calendar)
         {
-            CronCalendar calendar;
-            if (!_calendars.TryGetValue(point.Year, out calendar))
+            var year = point.Year;
+            if (2100 < year)
             {
-                calendar = _builder.BuildFor(point.Year);
-                _calendars[point.Year] = calendar;
+                calendar = null;
+                return false;
             }
-            return calendar;
+
+            if (!_calendars.TryGetValue(year, out calendar))
+            {
+                calendar = _builder.BuildFor(year);
+                _calendars[year] = calendar;
+            }
+            return true;
         }
     }
 }

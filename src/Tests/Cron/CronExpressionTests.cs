@@ -22,16 +22,17 @@ namespace Codestellation.Pulsar.Tests.Cron
             Assert.That(nearest.Value, Is.EqualTo(expected));
         }
         
-        [Test]
-        public void Should_correctly_show_nearest_occurence2()
+        [TestCase(1, 2012)]
+        [TestCase(12, 2013)]
+        public void Should_correctly_show_nearest_occurence2(int currentMonth,int expectedYear)
         {
-            var datetime = new DateTime(2012, 1, 15);
+            var datetime = new DateTime(2012, currentMonth, 15);
 
             var expression = new CronExpression("0 0 12 L 3,6 ?");
 
             var nearest = expression.NearestAfter(datetime);
 
-            var expected = new DateTime(2012,3,31,12,0,0);
+            var expected = new DateTime(expectedYear, 3, 31, 12, 0, 0);
 
             Assert.That(nearest.Value, Is.EqualTo(expected));
         }
