@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Codestellation.Pulsar.Cron;
 using NUnit.Framework;
 
@@ -35,6 +36,23 @@ namespace Codestellation.Pulsar.Tests.Cron
             var expected = new DateTime(expectedYear, 3, 31, 12, 0, 0);
 
             Assert.That(nearest.Value, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Perfomance_test()
+        {
+            var expression = new CronExpression("* * * * * ?");
+            var datetime = new DateTime(2012, 12, 31);
+
+            expression.NearestAfter(datetime);
+
+            var watch = Stopwatch.StartNew();
+
+            expression.NearestAfter(datetime);
+
+            watch.Stop();
+
+            Console.WriteLine("Elapsted {0}", watch.Elapsed);
         }
     }
 }

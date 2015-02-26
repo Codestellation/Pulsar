@@ -93,5 +93,10 @@ namespace Codestellation.Pulsar.Cron
             }
             throw new InvalidOperationException("It's impossible");
         }
+
+        public static DateTime BeginOfNextYear(DateTime currentPoint)
+        {
+            return new DateTime(currentPoint.Year+1, 1,1);
+        }
     }
 }

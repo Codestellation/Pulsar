@@ -54,7 +54,7 @@ namespace Codestellation.Pulsar.Cron
             CronCalendar calendar;
             while (TryGetCalendar(currentPoint, out calendar))
             {
-                foreach (var date in calendar.ScheduledDays)
+                foreach (var date in calendar.DaysAfter(point))
                 {
                     foreach (var time in _daySchedule.Values)
                     {
@@ -65,7 +65,7 @@ namespace Codestellation.Pulsar.Cron
                         }
                     }
                 }
-                currentPoint = currentPoint.AddYears(1);
+                currentPoint = CronDateHelper.BeginOfNextYear(currentPoint);
             }
             return null;
         }

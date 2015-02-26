@@ -10,13 +10,13 @@ namespace Codestellation.Pulsar.Cron
     public class SimpleCronField
     {
         private readonly CronFieldSettings _settings;
-        private readonly SortedSet<int> _values;
+        private readonly List<int> _values;
         private readonly List<Func<DateTime, bool>> _selectors;
 
         protected SimpleCronField(string token, CronFieldSettings settings)
         {
             _settings = settings;
-            _values = new SortedSet<int>();
+            _values = new List<int>();
             _selectors = new List<Func<DateTime, bool>>();
 
             var subTokens = CronParser.Tokenize(token,CronSymbols.Comma);
@@ -30,6 +30,11 @@ namespace Codestellation.Pulsar.Cron
             {
                 AddSelector(ContainsValue);
             }
+            var values = _values.Distinct().ToArray();
+
+            _values.Clear();
+            _values.AddRange(values);
+            _values.Sort();
         }
 
         public IEnumerable<int> Values
