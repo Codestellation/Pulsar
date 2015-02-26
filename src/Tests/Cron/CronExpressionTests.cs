@@ -39,20 +39,47 @@ namespace Codestellation.Pulsar.Tests.Cron
         }
 
         [Test]
-        public void Perfomance_test()
+        public void Perfomance_test_worst_case()
         {
             var expression = new CronExpression("* * * * * ?");
-            var datetime = new DateTime(2012, 12, 31);
+            var datetime = new DateTime(2012, 12, 31, 23, 59, 59);
 
-            expression.NearestAfter(datetime);
+            var nearestAfter = expression.NearestAfter(datetime);
+            Console.WriteLine(nearestAfter);
+            Assert.That(nearestAfter, Is.Not.Null);
 
             var watch = Stopwatch.StartNew();
 
-            expression.NearestAfter(datetime);
+            const int i1 = 1000 *1000;
+            for (int i = 0; i < i1; i++) expression.NearestAfter(datetime);
 
             watch.Stop();
 
-            Console.WriteLine("Elapsted {0}", watch.Elapsed);
+            var opsec = i1*1.0/(watch.ElapsedMilliseconds/1000.0);
+            var mscPerOp = 1/opsec * 1000 * 1000;
+            Console.WriteLine("Elapsted {0}; {1:N2} op/sec; {2} mcs", watch.Elapsed, opsec, mscPerOp);
+        }
+        
+        [Test]
+        public void Perfomance_test_best_case()
+        {
+            var expression = new CronExpression("0 0 0 1 * ?");
+            var datetime = new DateTime(2012, 1, 1, 0, 0, 0);
+
+            var nearestAfter = expression.NearestAfter(datetime);
+            Console.WriteLine(nearestAfter);
+            Assert.That(nearestAfter, Is.Not.Null);
+
+            var watch = Stopwatch.StartNew();
+
+            const int i1 = 1000 *1000;
+            for (int i = 0; i < i1; i++) expression.NearestAfter(datetime);
+
+            watch.Stop();
+
+            var opsec = i1*1.0/(watch.ElapsedMilliseconds/1000.0);
+            var mscPerOp = 1/opsec * 1000 * 1000;
+            Console.WriteLine("Elapsted {0}; {1:N2} op/sec; {2} mcs", watch.Elapsed, opsec, mscPerOp);
         }
     }
 }

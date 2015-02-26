@@ -56,7 +56,8 @@ namespace Codestellation.Pulsar.Cron
             {
                 foreach (var date in calendar.DaysAfter(point))
                 {
-                    foreach (var time in _daySchedule.Values)
+                    var timeFrom = currentPoint.Date < date ? new TimeSpan() : currentPoint.TimeOfDay;
+                    foreach (var time in _daySchedule.TimeAfter(timeFrom))
                     {
                         var candidate = date.Add(time);
                         if (candidate >= point)
