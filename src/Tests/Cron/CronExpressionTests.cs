@@ -39,6 +39,20 @@ namespace Codestellation.Pulsar.Tests.Cron
         }
 
         [Test]
+        public void Should_correctly_handle_datetime_with_microseconds()
+        {
+            var datetime = new DateTime(2012, 10, 15, 10, 0, 0).AddMilliseconds(100);
+
+            var expression = new CronExpression("* 0 10 * * ?");
+
+            var nearest = expression.NearestAfter(datetime);
+
+            var expected = new DateTime(2012, 10, 15, 10, 0, 1);
+
+            Assert.That(nearest.Value, Is.EqualTo(expected));
+        }
+
+        [Test]
         public void Perfomance_test_worst_case()
         {
             var expression = new CronExpression("* * * * * ?");

@@ -55,6 +55,12 @@ namespace Codestellation.Pulsar.Cron
         public DateTime? NearestAfter(DateTime point)
         {
             var currentPoint = point;
+            var milliseconds = point.Millisecond;
+            if (milliseconds > 0)
+            {
+                currentPoint = currentPoint.AddMilliseconds(1000 - milliseconds);
+            }
+            
             CronCalendar calendar;
             while (TryGetCalendar(currentPoint, out calendar))
             {
