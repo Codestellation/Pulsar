@@ -9,13 +9,13 @@ namespace Codestellation.Pulsar.Cron
     /// </summary>
     public class SimpleCronField
     {
-        private readonly CronFieldSettings _settings;
+        public readonly CronFieldSettings Settings;
         private readonly List<int> _values;
         private readonly List<Func<DateTime, bool>> _selectors;
 
         protected SimpleCronField(string token, CronFieldSettings settings)
         {
-            _settings = settings;
+            Settings = settings;
             _values = new List<int>();
             _selectors = new List<Func<DateTime, bool>>();
 
@@ -49,30 +49,30 @@ namespace Codestellation.Pulsar.Cron
 
         private bool ContainsValue(DateTime date)
         {
-            return _values.Contains(_settings.DatePartSelector(date));
+            return _values.Contains(Settings.DatePartSelector(date));
         }
 
         protected virtual void ParseToken(string token)
         {
             if (CronParser.IsAllVallues(token))
             {
-                _values.AddRange(CronParser.Range(_settings.MinValue, _settings.MaxValue));
+                _values.AddRange(CronParser.Range(Settings.MinValue, Settings.MaxValue));
                 return;
             }
             if (CronParser.IsRange(token))
             {
-                _values.AddRange(CronParser.ParseRange(token, _settings.MinValue, _settings.MaxValue));
+                _values.AddRange(CronParser.ParseRange(token, Settings.MinValue, Settings.MaxValue));
                 return;
             }
             if (CronParser.IsIncrement(token))
             {
-                _values.AddRange(CronParser.ParseIncrement(token, _settings.MinValue, _settings.MaxValue));
+                _values.AddRange(CronParser.ParseIncrement(token, Settings.MinValue, Settings.MaxValue));
                 return;
             }
             if (CronParser.IsNumber(token))
             {
                 var index = 0;
-                _values.Add(CronParser.ParseNumber(token, ref index, _settings.MinValue, _settings.MaxValue));
+                _values.Add(CronParser.ParseNumber(token, ref index, Settings.MinValue, Settings.MaxValue));
                 return;
             }
 
