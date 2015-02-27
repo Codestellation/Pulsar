@@ -33,5 +33,27 @@ namespace Codestellation.Pulsar.Cron
 
             }
         }
+
+        public bool ShouldFire(DateTime date)
+        {
+            return _days.Contains(date);
+        }
+
+        public bool TryFindNextDay(DateTime date, out DateTime closest)
+        {
+            for (int dayIndex = 0; dayIndex < _days.Count; dayIndex++)
+            {
+                var candidate = _days[dayIndex];
+
+                if (date < candidate)
+                {
+                    closest = candidate;
+                    return true;
+                }
+            }
+
+            closest = DateTime.MinValue;
+            return false;
+        }
     }
 }

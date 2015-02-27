@@ -54,18 +54,35 @@ namespace Codestellation.Pulsar.Cron
             CronCalendar calendar;
             while (TryGetCalendar(currentPoint, out calendar))
             {
-                foreach (var date in calendar.DaysAfter(point))
+                var currentPointDate = currentPoint.Date;
+                
+                if (calendar.ShouldFire(currentPointDate))
                 {
-                    var timeFrom = currentPoint.Date < date ? new TimeSpan() : currentPoint.TimeOfDay;
-                    foreach (var time in _daySchedule.TimeAfter(timeFrom))
+                    TimeSpan fireAt;
+                    if(_daySchedule.TryGetTimeAfter(currentPoint.TimeOfDay, out fireAt))
                     {
-                        var candidate = date.Add(time);
-                        if (candidate >= point)
-                        {
-                            return candidate;
-                        }
+                        return currentPointDate.Add(fireAt);
                     }
                 }
+                DateTime closest;
+                if (calendar.TryFindNextDay(currentPointDate, out closest))
+                {
+                    var time = _daySchedule.MinTime;
+                    return closest.Add(time);
+                }
+
+                //foreach (var date in calendar.DaysAfter(point))
+                //{
+                //    var timeFrom = currentPoint.Date < date ? new TimeSpan() : currentPoint.TimeOfDay;
+                //    foreach (var time in _daySchedule.TimeAfter(timeFrom))
+                //    {
+                //        var candidate = date.Add(time);
+                //        if (candidate >= point)
+                //        {
+                //            return candidate;
+                //        }
+                //    }
+                //}
                 currentPoint = CronDateHelper.BeginOfNextYear(currentPoint);
             }
             return null;

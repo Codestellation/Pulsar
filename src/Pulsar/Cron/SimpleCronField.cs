@@ -42,6 +42,11 @@ namespace Codestellation.Pulsar.Cron
             get { return _values; }
         }
 
+        public int MinValue
+        {
+            get { return _values[0]; }
+        }
+
         private bool ContainsValue(DateTime date)
         {
             return _values.Contains(_settings.DatePartSelector(date));
@@ -120,7 +125,5 @@ namespace Codestellation.Pulsar.Cron
         {
             return new SimpleCronField(year, CronFieldSettings.Year);
         }
-
-
     }
 }

@@ -33,6 +33,11 @@ namespace Codestellation.Pulsar.Cron
             } 
         }
 
+        public TimeSpan MinTime
+        {
+            get { return new TimeSpan(_hour.MinValue, _second.MinValue, _minute.MinValue); }
+        }
+
         public IEnumerable<TimeSpan> TimeAfter(TimeSpan timeOfDay)
         {
             var hours = timeOfDay.Hours;
@@ -64,6 +69,42 @@ namespace Codestellation.Pulsar.Cron
                     }
                 }
             }
+        }
+
+        public bool TryGetTimeAfter(TimeSpan timeOfDay, out TimeSpan fireAt)
+        {
+            var hours = timeOfDay.Hours;
+            var minutes = timeOfDay.Minutes;
+            var seconds = timeOfDay.Seconds;
+
+            foreach (var hour in _hour.Values)
+            {
+                if (hour < hours)
+                {
+                    continue;
+                }
+                var sameHour = hour == timeOfDay.Hours;
+
+                foreach (var minute in _minute.Values)
+                {
+                    if (sameHour && minute < minutes)
+                    {
+                        continue;
+                    }
+                    var sameMinute = sameHour && minute == minutes;
+                    foreach (var second in _second.Values)
+                    {
+                        if (sameMinute && second < seconds)
+                        {
+                            continue;
+                        }
+                        fireAt = new TimeSpan(hour, minute, second);
+                        return true;
+                    }
+                }
+            }
+            fireAt = TimeSpan.MinValue;
+            return false;
         }
     }
 }
