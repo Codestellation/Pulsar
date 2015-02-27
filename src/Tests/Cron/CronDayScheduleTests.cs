@@ -18,7 +18,7 @@ namespace Codestellation.Pulsar.Tests.Cron
         {
             _second = SimpleCronField.ParseSeconds("0/10");
             _minute = SimpleCronField.ParseMinutes("0,1");
-            _hour = SimpleCronField.ParseHours("10");
+            _hour = SimpleCronField.ParseHours("10,11");
             _schedule = new CronDaySchedule(_second, _minute, _hour);
         }
 
@@ -97,6 +97,20 @@ namespace Codestellation.Pulsar.Tests.Cron
 
             Console.WriteLine(result);
             var expectedTime = new TimeSpan(10, 1, 0);
+            Assert.That(found, Is.True);
+            Assert.That(result, Is.EqualTo(expectedTime));
+        }
+        
+        [Test]
+        public void Should_not_find_closest_time_if_now_is_after_last_point2()
+        {
+            var now = new TimeSpan(10, 1, 51);
+
+            TimeSpan result;
+            var found = _schedule.TryGetTimeAfter(now, out result);
+
+            Console.WriteLine(result);
+            var expectedTime = new TimeSpan(11, 0, 0);
             Assert.That(found, Is.True);
             Assert.That(result, Is.EqualTo(expectedTime));
         }
