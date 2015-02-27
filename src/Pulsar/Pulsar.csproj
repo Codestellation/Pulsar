@@ -52,6 +52,9 @@
     <Compile Include="Cron\DayOfMonthField.cs" />
     <Compile Include="Cron\DayOfWeekField.cs" />
     <Compile Include="Cron\SetExtensions.cs" />
+    <Compile Include="ITrigger.cs" />
+    <Compile Include="TriggerCallback.cs" />
+    <Compile Include="TriggerContext.cs" />
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
