@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Codestellation.Pulsar.Cron;
 using NUnit.Framework;
@@ -28,21 +29,16 @@ namespace Codestellation.Pulsar.Tests.Cron
             var actual = _schedule.Values.ToArray();
 
             var initial = new TimeSpan(10, 0, 0);
-            var expected = new[]
+
+            var expected = new List<TimeSpan>();
+
+            for (int i = 0; i < 12*10; i+=10)
             {
-                initial.Add(TimeSpan.FromSeconds(00)),
-                initial.Add(TimeSpan.FromSeconds(10)),
-                initial.Add(TimeSpan.FromSeconds(20)),
-                initial.Add(TimeSpan.FromSeconds(30)),
-                initial.Add(TimeSpan.FromSeconds(40)),
-                initial.Add(TimeSpan.FromSeconds(50)),
-                initial.Add(TimeSpan.FromSeconds(60)),
-                initial.Add(TimeSpan.FromSeconds(70)),
-                initial.Add(TimeSpan.FromSeconds(80)),
-                initial.Add(TimeSpan.FromSeconds(90)),
-                initial.Add(TimeSpan.FromSeconds(100)),
-                initial.Add(TimeSpan.FromSeconds(110)),
-            };
+                expected.Add(initial.Add(TimeSpan.FromSeconds(i)));
+                expected.Add(initial.Add(TimeSpan.FromHours(1)).Add(TimeSpan.FromSeconds(i)));
+            }
+            expected.Sort();
+            
             //note: order of values does matter!
             Assert.That(actual, Is.EqualTo(expected));
         }

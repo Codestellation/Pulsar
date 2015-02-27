@@ -11,6 +11,7 @@ namespace Codestellation.Pulsar.Cron
         private IntegerIndex _hourIndex;
         private IntegerIndex _minuteIndex;
         private IntegerIndex _secondIndex;
+        private readonly TimeSpan _timeSpan;
 
         public CronDaySchedule(SimpleCronField second, SimpleCronField minute, SimpleCronField hour)
         {
@@ -21,6 +22,7 @@ namespace Codestellation.Pulsar.Cron
             _second = second;
             _minute = minute;
             _hour = hour;
+            _timeSpan = new TimeSpan(_hour.MinValue, _second.MinValue, _minute.MinValue);
         }
 
         public IEnumerable<TimeSpan> Values
@@ -42,7 +44,7 @@ namespace Codestellation.Pulsar.Cron
 
         public TimeSpan MinTime
         {
-            get { return new TimeSpan(_hour.MinValue, _second.MinValue, _minute.MinValue); }
+            get { return _timeSpan; }
         }
 
         public bool TryGetTimeAfter(TimeSpan timeOfDay, out TimeSpan fireAt)
