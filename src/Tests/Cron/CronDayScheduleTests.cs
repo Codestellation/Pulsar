@@ -17,16 +17,14 @@ namespace Codestellation.Pulsar.Tests.Cron
         public void SetUp()
         {
             _second = SimpleCronField.ParseSeconds("0/10");
-            _minute = SimpleCronField.ParseMinutes("0");
+            _minute = SimpleCronField.ParseMinutes("0,1");
             _hour = SimpleCronField.ParseHours("10");
             _schedule = new CronDaySchedule(_second, _minute, _hour);
         }
-        
+
         [Test]
         public void Should_enumerate_intraday_points()
         {
-
-
             var actual = _schedule.Values.ToArray();
 
             var initial = new TimeSpan(10, 0, 0);
@@ -38,11 +36,16 @@ namespace Codestellation.Pulsar.Tests.Cron
                 initial.Add(TimeSpan.FromSeconds(30)),
                 initial.Add(TimeSpan.FromSeconds(40)),
                 initial.Add(TimeSpan.FromSeconds(50)),
+                initial.Add(TimeSpan.FromSeconds(60)),
+                initial.Add(TimeSpan.FromSeconds(70)),
+                initial.Add(TimeSpan.FromSeconds(80)),
+                initial.Add(TimeSpan.FromSeconds(90)),
+                initial.Add(TimeSpan.FromSeconds(100)),
+                initial.Add(TimeSpan.FromSeconds(110)),
             };
             //note: order of values does matter!
             Assert.That(actual, Is.EqualTo(expected));
         }
-
 
         [Test]
         public void Should_find_closest_time_if_now_is_before_occurence()
@@ -56,7 +59,7 @@ namespace Codestellation.Pulsar.Tests.Cron
             var expectedTime = new TimeSpan(10, 0, 0);
             Assert.That(result, Is.EqualTo(expectedTime));
         }
-        
+
         [Test]
         public void Should_find_closest_time_if_now_is_equals_to_a_point()
         {
@@ -69,7 +72,7 @@ namespace Codestellation.Pulsar.Tests.Cron
             var expectedTime = new TimeSpan(10, 0, 0);
             Assert.That(result, Is.EqualTo(expectedTime));
         }
-        
+
         [Test]
         public void Should_find_closest_time_if_now_is_between_points()
         {
@@ -78,13 +81,12 @@ namespace Codestellation.Pulsar.Tests.Cron
             TimeSpan result;
             var found = _schedule.TryGetTimeAfter(now, out result);
 
-
             Console.WriteLine(result);
             Assert.That(found, Is.True);
             var expectedTime = new TimeSpan(10, 0, 10);
             Assert.That(result, Is.EqualTo(expectedTime));
         }
-        
+
         [Test]
         public void Should_not_find_closest_time_if_now_is_after_last_point()
         {
@@ -92,10 +94,11 @@ namespace Codestellation.Pulsar.Tests.Cron
 
             TimeSpan result;
             var found = _schedule.TryGetTimeAfter(now, out result);
-            
+
             Console.WriteLine(result);
-            Assert.That(found, Is.False);
-            Assert.That(result, Is.EqualTo(TimeSpan.MinValue));
+            var expectedTime = new TimeSpan(10, 1, 0);
+            Assert.That(found, Is.True);
+            Assert.That(result, Is.EqualTo(expectedTime));
         }
     }
 }

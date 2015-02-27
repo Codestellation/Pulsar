@@ -81,8 +81,8 @@ namespace Codestellation.Pulsar.Cron
 
             if (second == IntegerIndex.NotFound)
             {
-                fireAt = TimeSpan.MinValue;
-                return false;
+                var nextMinute = new TimeSpan(hours, minute + 1, 0);
+                return TryGetTimeAfter(nextMinute, out fireAt);
             }
 
             fireAt = new TimeSpan(hour, minute, second);
