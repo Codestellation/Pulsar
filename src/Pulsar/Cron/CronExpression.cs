@@ -5,16 +5,12 @@ namespace Codestellation.Pulsar.Cron
 {
     public class CronExpression
     {
-        private SimpleCronField _seconds;
-        private SimpleCronField _minutes;
-        private SimpleCronField _hours;
-        private DayOfMonthField _dayOfMonth;
-        private SimpleCronField _month;
-        private DayOfWeekField _dayOfWeek;
         private SimpleCronField _year;
         private CronCalendarBuilder _builder;
         private CronDaySchedule _daySchedule;
         private Dictionary<int, CronCalendar> _calendars;
+        private int _minYear;
+        private int _maxYear;
 
         public CronExpression(string value)
         {
@@ -27,25 +23,33 @@ namespace Codestellation.Pulsar.Cron
 
             _calendars = new Dictionary<int, CronCalendar>();
 
-            _seconds = SimpleCronField.ParseSeconds(tokens[0]);
-            _minutes = SimpleCronField.ParseMinutes(tokens[1]);
-            _hours = SimpleCronField.ParseHours(tokens[2]);
+            var seconds = SimpleCronField.ParseSeconds(tokens[0]);
+            var minutes = SimpleCronField.ParseMinutes(tokens[1]);
+            var hours = SimpleCronField.ParseHours(tokens[2]);
+            
+            _daySchedule = new CronDaySchedule(seconds, minutes, hours);
 
-            _dayOfMonth = new DayOfMonthField(tokens[3]);
-            _month = SimpleCronField.ParseMonth(tokens[4]);
-            _dayOfWeek = new DayOfWeekField(tokens[5]);
+
+            var dayOfMonth = new DayOfMonthField(tokens[3]);
+            var month = SimpleCronField.ParseMonth(tokens[4]);
+            var dayOfWeek = new DayOfWeekField(tokens[5]);
+
+            _builder = new CronCalendarBuilder()
+                .SetMonth(month)
+                .SetDayOfWeek(dayOfWeek)
+                .SetDayOfMonth(dayOfMonth);
 
             if (tokens.Length == 7)
             {
                 _year = SimpleCronField.ParseYear(tokens[6]);
+                _minYear = _year.MinValue;
+                _maxYear = _year.MaxValue;
             }
-
-            _builder = new CronCalendarBuilder()
-                .SetMonth(_month)
-                .SetDayOfWeek(_dayOfWeek)
-                .SetDayOfMonth(_dayOfMonth);
-
-            _daySchedule = new CronDaySchedule(_seconds, _minutes, _hours);
+            else
+            {
+                _minYear = 2000;
+                _maxYear = 2100;
+            }
         }
 
         public DateTime? NearestAfter(DateTime point)
@@ -71,18 +75,6 @@ namespace Codestellation.Pulsar.Cron
                     return closest.Add(time);
                 }
 
-                //foreach (var date in calendar.DaysAfter(point))
-                //{
-                //    var timeFrom = currentPoint.Date < date ? new TimeSpan() : currentPoint.TimeOfDay;
-                //    foreach (var time in _daySchedule.TimeAfter(timeFrom))
-                //    {
-                //        var candidate = date.Add(time);
-                //        if (candidate >= point)
-                //        {
-                //            return candidate;
-                //        }
-                //    }
-                //}
                 currentPoint = CronDateHelper.BeginOfNextYear(currentPoint);
             }
             return null;
@@ -91,7 +83,8 @@ namespace Codestellation.Pulsar.Cron
         private bool TryGetCalendar(DateTime point, out CronCalendar calendar)
         {
             var year = point.Year;
-            if (2100 < year)
+
+            if (year < _minYear && _maxYear < year)
             {
                 calendar = null;
                 return false;

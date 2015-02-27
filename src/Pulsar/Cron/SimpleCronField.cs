@@ -47,6 +47,11 @@ namespace Codestellation.Pulsar.Cron
             get { return _values[0]; }
         }
 
+        public int MaxValue
+        {
+            get { return _values[_values.Count - 1]; }
+        }
+
         private bool ContainsValue(DateTime date)
         {
             return _values.Contains(Settings.DatePartSelector(date));
