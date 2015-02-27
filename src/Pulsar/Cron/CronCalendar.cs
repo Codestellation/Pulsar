@@ -7,11 +7,13 @@ namespace Codestellation.Pulsar.Cron
     public class CronCalendar
     {
         private readonly List<DateTime> _days;
+        private readonly HashSet<DateTime> _dayIndex;
 
         public CronCalendar(IEnumerable<DateTime> scheduledDays)
         {
             _days = scheduledDays.ToList();
             _days.Sort();
+            _dayIndex = new HashSet<DateTime>(_days);
         }
 
         public IEnumerable<DateTime> ScheduledDays
@@ -30,13 +32,12 @@ namespace Codestellation.Pulsar.Cron
                 {
                     yield return candidate;
                 }
-
             }
         }
 
         public bool ShouldFire(DateTime date)
         {
-            return _days.Contains(date);
+            return _dayIndex.Contains(date);
         }
 
         public bool TryFindNextDay(DateTime date, out DateTime closest)
