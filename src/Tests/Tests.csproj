@@ -47,6 +47,7 @@
     <Compile Include="Cron\DayOfWeekFieldTests.cs" />
     <Compile Include="Cron\TimeFieldTests.cs" />
     <Compile Include="ScratchPad.cs" />
+    <Compile Include="Triggers\CronTriggerTests.cs" />
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

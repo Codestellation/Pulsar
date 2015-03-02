@@ -52,14 +52,18 @@
     <Compile Include="Cron\DayOfMonthField.cs" />
     <Compile Include="Cron\DayOfWeekField.cs" />
     <Compile Include="Cron\SetExtensions.cs" />
+    <Compile Include="IScheduler.cs" />
+    <Compile Include="ITask.cs" />
     <Compile Include="ITrigger.cs" />
     <Compile Include="TriggerCallback.cs" />
     <Compile Include="TriggerContext.cs" />
+    <Compile Include="Triggers\CronTrigger.cs" />
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
