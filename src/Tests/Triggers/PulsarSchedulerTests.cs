@@ -3,12 +3,15 @@
 namespace Codestellation.Pulsar.Tests.Triggers
 {
     [TestFixture]
-    public class CronTriggerTests
+    public class PulsarSchedulerTests
     {
         [Test]
         public void Should()
         {
-            //var scheduler = new PulsarScheduler();
+            var scheduler = new PulsarScheduler();
+
+
+
         }
     }
 }
