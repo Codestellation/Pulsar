@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace Codestellation.Pulsar
 {
@@ -7,17 +8,24 @@ namespace Codestellation.Pulsar
     {
         private readonly ConcurrentDictionary<Guid, ITask> _tasks;
         private volatile bool _started;
+        private volatile bool _disposed;
 
         public PulsarScheduler()
         {
             _tasks = new ConcurrentDictionary<Guid, ITask>();
         }
 
-        public void Schedule(ITask task)
+        public IEnumerable<ITask> Tasks
         {
+            get { return _tasks.Values; }
+        }
+
+        public IScheduler Add(ITask task)
+        {
+            EnsureNotDisposed();
             if (!_tasks.TryAdd(task.Id, task))
             {
-                var message = string.Format("Task {0} with id {1} already scheduled.", task.Id, task);
+                var message = string.Format("Task {0} with id {1} already added.", task.Id, task);
                 throw new InvalidOperationException(message);
             }
 
@@ -28,7 +36,20 @@ namespace Codestellation.Pulsar
                     trigger.Start();
                 }
             }
+            return this;
+        }
 
+        public IScheduler Remove(ITask task)
+        {
+            ITask removed;
+            if (_tasks.TryRemove(task.Id, out removed))
+            {
+                foreach (var trigger in removed.Triggers)
+                {
+                    trigger.Stop();
+                }
+            }
+            return this;
         }
 
         public void Start()
@@ -57,10 +78,22 @@ namespace Codestellation.Pulsar
             }
         }
 
-
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if (_disposed)
+            {
+                return;
+            }
+            _disposed = true;
+            Stop();
+        }
+
+        private void EnsureNotDisposed()
+        {
+            if (_disposed)
+            {
+                throw new InvalidOperationException();
+            }
         }
     }
 }
