@@ -8,7 +8,7 @@ namespace Codestellation.Pulsar
         private readonly Guid _id;
         private readonly string _name;
         private readonly Action _action;
-        private readonly List<ITrigger> _triggers;
+        private readonly HashSet<ITrigger> _triggers;
 
         public SimpleTask(string name, Action action) : this(action)
         {
@@ -23,25 +23,25 @@ namespace Codestellation.Pulsar
             }
             _action = action;
             _id = Guid.NewGuid();
-            _triggers = new List<ITrigger>();
+            _triggers = new HashSet<ITrigger>();
         }
 
-        public Guid Id
+        public virtual Guid Id
         {
             get { return _id; }
         }
 
-        public string Name
+        public virtual string Name
         {
             get { return _name; }
         }
 
-        public IEnumerable<ITrigger> Triggers
+        public virtual IEnumerable<ITrigger> Triggers
         {
             get { return _triggers; }
         }
 
-        public SimpleTask AddTrigger(ITrigger trigger)
+        public virtual SimpleTask AddTrigger(ITrigger trigger)
         {
             if (trigger == null)
             {
@@ -51,7 +51,7 @@ namespace Codestellation.Pulsar
             return this;
         }
 
-        public SimpleTask RemoveTrigger(ITrigger trigger)
+        public virtual SimpleTask RemoveTrigger(ITrigger trigger)
         {
             if (trigger == null)
             {
@@ -61,7 +61,7 @@ namespace Codestellation.Pulsar
             return this;
         }
 
-        public void Run()
+        public virtual void Run()
         {
             _action();
         }
