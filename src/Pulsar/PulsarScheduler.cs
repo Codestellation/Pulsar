@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Codestellation.Pulsar
 {
-    public class PulsarScheduler : IScheduler, IDisposable
+    public class PulsarScheduler : IScheduler, IDisposable, ISchedulerController
     {
         private readonly ConcurrentDictionary<Guid, ITask> _tasks;
         private volatile bool _started;

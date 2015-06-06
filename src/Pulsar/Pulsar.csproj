@@ -53,6 +53,7 @@
     <Compile Include="Cron\DayOfWeekField.cs" />
     <Compile Include="Cron\SetExtensions.cs" />
     <Compile Include="IScheduler.cs" />
+    <Compile Include="ISchedulerController.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="ITrigger.cs" />
     <Compile Include="PulsarScheduler.cs" />
