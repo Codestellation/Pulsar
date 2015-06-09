@@ -2,12 +2,12 @@
 {
     public struct IntegerIndex
     {
-        public const int NotFound = -1;
+        public const sbyte NotFound = -1;
 
-        private readonly int[] _indexArray;
+        private readonly sbyte[] _indexArray;
         public IntegerIndex(SimpleCronField field)
         {
-            _indexArray = new int[field.Settings.MaxValue + 1];
+            _indexArray = new sbyte[field.Settings.MaxValue + 1];
 
             for (int i = 0; i < _indexArray.Length; i++)
             {
@@ -16,7 +16,7 @@
 
             foreach (var value in field.Values)
             {
-                _indexArray[value] = value;
+                _indexArray[value] = (sbyte)value;
             }
 
             int next = NotFound;
@@ -28,7 +28,7 @@
                     next = val;
                 }
 
-                _indexArray[i] = next;
+                _indexArray[i] = (sbyte)next;
             }
         }
 
