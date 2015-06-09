@@ -7,7 +7,7 @@ namespace Codestellation.Pulsar
     {
         Guid Id { get; }
 
-        string Name { get; }
+        string Title { get; }
 
         IEnumerable<ITrigger> Triggers { get; }
 

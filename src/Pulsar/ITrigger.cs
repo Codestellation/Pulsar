@@ -8,10 +8,8 @@ namespace Codestellation.Pulsar
 
         DateTime? NextFireAt { get; }
 
-        void Start();
+        void Start(TriggerCallback callback);
 
         void Stop();
-
-        void SetCallback(TriggerCallback callback);
     }
 }

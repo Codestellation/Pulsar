@@ -31,7 +31,7 @@ namespace Codestellation.Pulsar
             get { return _id; }
         }
 
-        public virtual string Name
+        public virtual string Title
         {
             get { return _name; }
         }
