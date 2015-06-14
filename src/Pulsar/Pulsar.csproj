@@ -59,6 +59,10 @@
     <Compile Include="ITrigger.cs" />
     <Compile Include="PulsarScheduler.cs" />
     <Compile Include="SimpleTask.cs" />
+    <Compile Include="Timers\AbstractTimer.cs" />
+    <Compile Include="Timers\ITimer.cs" />
+    <Compile Include="Timers\PreciseTimer.cs" />
+    <Compile Include="Timers\SimpleTimer.cs" />
     <Compile Include="TriggerCallback.cs" />
     <Compile Include="TriggerContext.cs" />
     <Compile Include="Triggers\CronTrigger.cs" />

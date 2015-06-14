@@ -6,13 +6,13 @@ namespace Codestellation.Pulsar
     public class SimpleTask : ITask
     {
         private readonly Guid _id;
-        private readonly string _name;
+        private readonly string _title;
         private readonly Action _action;
         private readonly HashSet<ITrigger> _triggers;
 
         public SimpleTask(string name, Action action) : this(action)
         {
-            _name = string.IsNullOrWhiteSpace(name) ? string.Format("Task {0}", _id) : name;
+            _title = string.IsNullOrWhiteSpace(name) ? string.Format("Task {0}", _id) : name;
         }
 
         public SimpleTask(Action action)
@@ -33,7 +33,7 @@ namespace Codestellation.Pulsar
 
         public virtual string Title
         {
-            get { return _name; }
+            get { return _title; }
         }
 
         public virtual IEnumerable<ITrigger> Triggers
