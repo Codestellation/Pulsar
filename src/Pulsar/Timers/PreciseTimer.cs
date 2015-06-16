@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Codestellation.Pulsar.Misc;
 
 namespace Codestellation.Pulsar.Timers
 {
@@ -12,17 +13,17 @@ namespace Codestellation.Pulsar.Timers
         
         private bool _shouldFireCallback;
 
-        protected override void SetupInternal(DateTime fireAt, TimeSpan? interval)
+        protected override void SetupInternal(DateTime startAt, TimeSpan? interval)
         {
             _interval = interval;
-            _startAt = fireAt.ToUniversalTime();
+            _startAt = startAt.ToUniversalTime();
             _shouldFireCallback = false;
             SetupTimer(false);
         }
 
         private void SetupTimer(bool isTimerCallback)
         {
-            var fireAfter = _startAt - UtcNow();
+            var fireAfter = _startAt - Clock.UtcNow;
 
             if (fireAfter <= TimeSpan.Zero) 
             {

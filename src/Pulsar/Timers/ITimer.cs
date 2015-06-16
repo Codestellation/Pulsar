@@ -6,6 +6,8 @@ namespace Codestellation.Pulsar.Timers
     {
         event Action OnFired;
 
-        void Fire(DateTime startAt, TimeSpan? interval);
+        void Fire(DateTime startAt, TimeSpan? interval = null);
+        
+        void Stop();
     }
 }

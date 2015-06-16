@@ -1,13 +1,13 @@
 ﻿using System;
+using Codestellation.Pulsar.Misc;
 
 namespace Codestellation.Pulsar.Timers
 {
     public class SimpleTimer : AbstractTimer
     {
-
-        protected override void SetupInternal(DateTime fireAt, TimeSpan? interval)
+        protected override void SetupInternal(DateTime startAt, TimeSpan? interval)
         {
-            var fireSince = fireAt - UtcNow();
+            var fireSince = startAt - Clock.UtcNow;
 
             var intervalInternal = interval ?? TimeSpan.Zero;
 

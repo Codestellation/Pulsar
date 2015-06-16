@@ -57,6 +57,7 @@
     <Compile Include="ISchedulerController.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="ITrigger.cs" />
+    <Compile Include="Misc\Clock.cs" />
     <Compile Include="PulsarScheduler.cs" />
     <Compile Include="SimpleTask.cs" />
     <Compile Include="Timers\AbstractTimer.cs" />

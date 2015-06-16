@@ -1,35 +1,41 @@
 ﻿using System;
 using Codestellation.Pulsar.Cron;
+using Codestellation.Pulsar.Misc;
+using Codestellation.Pulsar.Timers;
 
 namespace Codestellation.Pulsar.Triggers
 {
     public class CronTrigger : ITrigger
     {
         private TriggerCallback _callback;
-        private CronExpression _cronExpression;
+        private readonly CronExpression _cronExpression;
+        private readonly ITimer _timer;
 
-        public CronTrigger(string cronExpression) : this(new CronExpression(cronExpression))
+        public CronTrigger(string cronExpression, ITimer timer) : this(new CronExpression(cronExpression), timer)
         {
             
         }
 
-        public CronTrigger(CronExpression cronExpression)
+        public CronTrigger(CronExpression cronExpression, ITimer timer)
         {
             if (cronExpression == null)
             {
                 throw new ArgumentNullException("cronExpression");
             }
-            _cronExpression = cronExpression;
-        }
 
-        public DateTime? LastFiredAt
-        {
-            get { throw new NotImplementedException(); }
+            if (timer == null)
+            {
+                throw new ArgumentNullException("timer");
+            }
+
+            _cronExpression = cronExpression;
+            _timer = timer;
+            _timer.OnFired += OnTimer;
         }
 
         public DateTime? NextFireAt
         {
-            get { throw new NotImplementedException(); }
+            get { return _cronExpression.NearestAfter(Clock.UtcNow); }
         }
 
         public void Start(TriggerCallback callback)
@@ -39,11 +45,28 @@ namespace Codestellation.Pulsar.Triggers
                 throw new ArgumentNullException("callback");
             }
             _callback = callback;
+
+            SetupTimer();
+        }
+
+        private void SetupTimer()
+        {
+            if (NextFireAt.HasValue)
+            {
+                _timer.Fire(NextFireAt.Value);
+            }
         }
 
         public void Stop()
         {
-            throw new NotImplementedException();
+            _timer.Stop();
+        }
+
+        private void OnTimer()
+        {
+            SetupTimer();
+            var context = new TriggerContext(this);
+            _callback(context);
         }
     }
 }
