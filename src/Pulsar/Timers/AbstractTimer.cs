@@ -5,13 +5,13 @@ namespace Codestellation.Pulsar.Timers
 {
     public abstract class AbstractTimer : ITimer, IDisposable
     {
-        private readonly Timer _internalTimer;
+        private readonly StubTimer _internalTimer;
 
         public virtual event Action OnFired;
 
         protected AbstractTimer()
         {
-            _internalTimer = new Timer(ignore => OnInternalTimerFired(), this, Timeout.Infinite, Timeout.Infinite);
+            _internalTimer = new StubTimer(ignore => OnInternalTimerFired(), this, Timeout.Infinite, Timeout.Infinite);
         }
 
         public void Fire(DateTime startAt, TimeSpan? interval = null)

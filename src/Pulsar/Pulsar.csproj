@@ -64,6 +64,7 @@
     <Compile Include="Timers\ITimer.cs" />
     <Compile Include="Timers\PreciseTimer.cs" />
     <Compile Include="Timers\SimpleTimer.cs" />
+    <Compile Include="Timers\StubTimer.cs" />
     <Compile Include="TriggerCallback.cs" />
     <Compile Include="TriggerContext.cs" />
     <Compile Include="Triggers\CronTrigger.cs" />
