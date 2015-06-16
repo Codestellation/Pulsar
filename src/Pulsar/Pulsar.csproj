@@ -67,6 +67,8 @@
     <Compile Include="TriggerCallback.cs" />
     <Compile Include="TriggerContext.cs" />
     <Compile Include="Triggers\CronTrigger.cs" />
+    <Compile Include="Triggers\SimpleTimerTrigger.cs" />
+    <Compile Include="Triggers\TimerTrigger.cs" />
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
