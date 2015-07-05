@@ -3,12 +3,11 @@ using Codestellation.Pulsar.Timers;
 
 namespace Codestellation.Pulsar.Triggers
 {
-    public abstract class TimerTrigger : ITrigger
+    public abstract class TimerTrigger : AbstractTrigger
     {
-        private TriggerCallback _callback;
         private readonly ITimer _timer;
 
-        public TimerTrigger(ITimer timer)
+        protected TimerTrigger(ITimer timer)
         {
             if (timer == null)
             {
@@ -24,38 +23,14 @@ namespace Codestellation.Pulsar.Triggers
             InvokeCallback();
         }
 
-        public void Start(TriggerCallback callback)
-        {
-            if (callback == null)
-            {
-                throw new ArgumentNullException("callback");
-            }
-            _callback = callback;
-
-            OnStart();
-        }
-
-        protected abstract void OnStart();
-
-        public void Stop()
+        protected override void OnStop()
         {
             _timer.Stop();
-            OnStop();
-        }
-
-        protected virtual void OnStop()
-        {
         }
 
         protected void SetupTimer(DateTime fireAt, TimeSpan? interval = null)
         {
             _timer.Fire(fireAt, interval);
-        }
-
-        protected void InvokeCallback()
-        {
-            var context = new TriggerContext(this);
-            _callback(context);
         }
     }
 }

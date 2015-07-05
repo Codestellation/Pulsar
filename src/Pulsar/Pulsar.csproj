@@ -67,7 +67,9 @@
     <Compile Include="Timers\StubTimer.cs" />
     <Compile Include="TriggerCallback.cs" />
     <Compile Include="TriggerContext.cs" />
+    <Compile Include="Triggers\AbstractTrigger.cs" />
     <Compile Include="Triggers\CronTrigger.cs" />
+    <Compile Include="Triggers\ManualTrigger.cs" />
     <Compile Include="Triggers\SimpleTimerTrigger.cs" />
     <Compile Include="Triggers\TimerTrigger.cs" />
     <None Include="App.config" />
