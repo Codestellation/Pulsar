@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Codestellation.Pulsar
 {
-    public abstract class AbastractScheduler : IScheduler, IDisposable, ISchedulerController
+    public abstract class AbstractScheduler : IScheduler, IDisposable, ISchedulerController
     {
         private volatile bool _started;
         private volatile bool _disposed;
