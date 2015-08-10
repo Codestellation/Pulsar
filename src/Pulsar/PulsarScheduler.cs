@@ -13,17 +13,13 @@ namespace Codestellation.Pulsar
             _tasks = new ConcurrentDictionary<Guid, ITask>();
         }
 
-        public override IEnumerable<ITask> Tasks
-        {
-            get { return _tasks.Values; }
-        }
+        public override IEnumerable<ITask> Tasks => _tasks.Values;
 
         protected override void AddInternal(ITask task)
         {
             if (!_tasks.TryAdd(task.Id, task))
             {
-                var message = string.Format("Task {0} with id {1} already added.", task.Id, task);
-                throw new InvalidOperationException(message);
+                throw new InvalidOperationException($"Task {task.Id} with id {task} already added.");
             }
 
             if (!Started)
@@ -32,7 +28,7 @@ namespace Codestellation.Pulsar
             }
             foreach (var trigger in task.Triggers)
             {
-                trigger.Start(null);
+                StartTrigger(task, trigger);
             }
         }
 
@@ -51,11 +47,11 @@ namespace Codestellation.Pulsar
 
         protected override void StartInternal()
         {
-            foreach (var task in _tasks)
+            foreach (var task in _tasks.Values)
             {
-                foreach (var trigger in task.Value.Triggers)
+                foreach (var trigger in task.Triggers)
                 {
-                    trigger.Start(null);
+                    StartTrigger(task, trigger);
                 }
             }
         }
@@ -69,6 +65,12 @@ namespace Codestellation.Pulsar
                     trigger.Stop();
                 }
             }
+        }
+
+        private static void StartTrigger(ITask task, ITrigger trigger)
+        {
+            TriggerCallback callback = context => task.Run();
+            trigger.Start(callback);
         }
     }
 }

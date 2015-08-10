@@ -74,7 +74,7 @@ namespace Codestellation.Pulsar
         {
             if (_disposed)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Scheduler was disposed");
             }
         }
     }
