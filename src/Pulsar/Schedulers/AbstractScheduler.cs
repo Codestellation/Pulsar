@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Codestellation.Pulsar
+namespace Codestellation.Pulsar.Schedulers
 {
     public abstract class AbstractScheduler : IScheduler, IDisposable, ISchedulerController
     {

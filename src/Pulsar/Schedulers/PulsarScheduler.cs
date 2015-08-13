@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Codestellation.Pulsar.Triggers;
 
-namespace Codestellation.Pulsar
+namespace Codestellation.Pulsar.Schedulers
 {
     public class PulsarScheduler : AbstractScheduler
     {

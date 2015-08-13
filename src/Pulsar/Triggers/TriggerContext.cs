@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Codestellation.Pulsar
+namespace Codestellation.Pulsar.Triggers
 {
     public class TriggerContext
     {

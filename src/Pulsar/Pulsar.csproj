@@ -40,7 +40,7 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
-    <Compile Include="AbstractScheduler.cs" />
+    <Compile Include="Schedulers\AbstractScheduler.cs" />
     <Compile Include="Cron\CronCalendar.cs" />
     <Compile Include="Cron\CronCalendarBuilder.cs" />
     <Compile Include="Cron\CronDateHelper.cs" />
@@ -59,15 +59,15 @@
     <Compile Include="ITask.cs" />
     <Compile Include="ITrigger.cs" />
     <Compile Include="Misc\Clock.cs" />
-    <Compile Include="PulsarScheduler.cs" />
-    <Compile Include="SimpleTask.cs" />
+    <Compile Include="Schedulers\PulsarScheduler.cs" />
+    <Compile Include="Tasks\SimpleTask.cs" />
     <Compile Include="Timers\AbstractTimer.cs" />
     <Compile Include="Timers\ITimer.cs" />
     <Compile Include="Timers\PreciseTimer.cs" />
     <Compile Include="Timers\SimpleTimer.cs" />
     <Compile Include="Timers\StubTimer.cs" />
-    <Compile Include="TriggerCallback.cs" />
-    <Compile Include="TriggerContext.cs" />
+    <Compile Include="Triggers\TriggerCallback.cs" />
+    <Compile Include="Triggers\TriggerContext.cs" />
     <Compile Include="Triggers\AbstractTrigger.cs" />
     <Compile Include="Triggers\CronTrigger.cs" />
     <Compile Include="Triggers\ManualTrigger.cs" />

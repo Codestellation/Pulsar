@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Codestellation.Pulsar
+namespace Codestellation.Pulsar.Tasks
 {
     public class SimpleTask : ITask
     {
@@ -10,7 +10,8 @@ namespace Codestellation.Pulsar
         private readonly Action _action;
         private readonly HashSet<ITrigger> _triggers;
 
-        public SimpleTask(string name, Action action) : this(action)
+        public SimpleTask(string name, Action action)
+            : this(action)
         {
             _title = string.IsNullOrWhiteSpace(name) ? string.Format("Task {0}", _id) : name;
         }
