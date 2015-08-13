@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Security.Permissions;
 
 namespace Codestellation.Pulsar.Cron
 {
@@ -141,16 +139,15 @@ namespace Codestellation.Pulsar.Cron
             }
 
             var first = CronDateHelper.First(dayOfWeek, date);
-            var daysToAdd = (number-1)*7;
+            var daysToAdd = (number - 1) * 7;
             var candidate = first.AddDays(daysToAdd);
             return candidate.Equals(date.Date);
         }
 
         public static string[] Tokenize(string token, char separator)
         {
-            return token.Split(new[] {separator}, StringSplitOptions.RemoveEmptyEntries);
+            return token.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
         }
-
 
         public static IEnumerable<int> Range(int start, int end)
         {

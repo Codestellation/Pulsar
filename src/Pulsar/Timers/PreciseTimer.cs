@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading;
+using System.Threading.Tasks;
 using Codestellation.Pulsar.Misc;
 
 namespace Codestellation.Pulsar.Timers
@@ -10,7 +10,7 @@ namespace Codestellation.Pulsar.Timers
 
         private DateTime _startAt;
         private TimeSpan? _interval;
-        
+
         private bool _shouldFireCallback;
 
         protected override void SetupInternal(DateTime startAt, TimeSpan? interval)
@@ -25,7 +25,7 @@ namespace Codestellation.Pulsar.Timers
         {
             var fireAfter = _startAt - Clock.UtcNow;
 
-            if (fireAfter <= TimeSpan.Zero) 
+            if (fireAfter <= TimeSpan.Zero)
             {
                 if (isTimerCallback)
                 {
@@ -33,7 +33,7 @@ namespace Codestellation.Pulsar.Timers
                 }
                 else
                 {
-                    ThreadPool.UnsafeQueueUserWorkItem(state => Callback(), null);
+                    Task.Run((Action)Callback);
                 }
 
                 SetupFireSinceInterval();

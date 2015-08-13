@@ -18,10 +18,9 @@ namespace Codestellation.Pulsar.Timers
         {
             if (interval < TimeSpan.Zero)
             {
-                throw new ArgumentOutOfRangeException("interval", interval, "Value should be greater than or equal to zero.");
+                throw new ArgumentOutOfRangeException(nameof(interval), interval, "Value should be greater than or equal to zero.");
             }
 
-            
             SetupInternal(startAt, interval);
         }
 
@@ -41,12 +40,7 @@ namespace Codestellation.Pulsar.Timers
 
         protected void Callback()
         {
-            var onFired = OnFired;
-            Thread.MemoryBarrier();
-            if (onFired != null)
-            {
-                onFired();
-            }
+            Volatile.Read(ref OnFired)?.Invoke();
         }
 
         public virtual void Dispose()
