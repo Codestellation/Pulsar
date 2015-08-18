@@ -2,8 +2,9 @@
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
 
+var configurationName = "Release";
 var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
+var configuration = Argument("configuration", configurationName);
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
 //////////////////////////////////////////////////////////////////////
@@ -36,12 +37,26 @@ Task("Build")
         settings.SetConfiguration(configuration));
 });
 
+Task("Test")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+     var directory = new DirectoryInfo(@".\");
+     var testsAssembly = directory
+         .EnumerateFiles("*.Tests.dll", SearchOption.AllDirectories)
+         .Select(x => x.FullName)
+         .First(x => x.Contains(configurationName));
+     Console.WriteLine(testsAssembly);
+     NUnit(testsAssembly);
+});
+
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("Build");
+    .IsDependentOn("Test");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
