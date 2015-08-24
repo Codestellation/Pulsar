@@ -10,7 +10,7 @@ var configuration = Argument("configuration", configurationName);
 //////////////////////////////////////////////////////////////////////
 
 // Define directories.
-var buildDir = Directory("./src/Example/bin") + Directory(configuration);
+var buildDir = Directory("./build");
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
