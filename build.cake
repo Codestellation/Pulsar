@@ -130,8 +130,13 @@ Task("Test")
          .EnumerateFiles("*.Tests.dll", SearchOption.AllDirectories)
          .Select(x => x.FullName)
          .First();
-     Console.WriteLine(testsAssembly);
-     NUnit(testsAssembly);
+
+     var nunitPath = new DirectoryInfo("./")
+        .EnumerateFiles("nunit-console.exe", SearchOption.AllDirectories)
+        .First();
+
+     var settings = new NUnitSettings { ToolPath = nunitPath.FullName };
+     NUnit(testsAssembly, settings);
 });
 
 

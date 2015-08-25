@@ -8,10 +8,10 @@ Param(
     [switch]$Experimental,
     [switch]$WhatIf
 )
-
+$PACKAGES_DIR = Join-Path $PSScriptRoot "packages"
 $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
 $NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
-$CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
+$CAKE_EXE = Join-Path $PACKAGES_DIR "Cake/Cake.exe"
 
 # Should we use experimental build of Roslyn?
 $UseExperimental = "";
