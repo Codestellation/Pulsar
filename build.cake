@@ -67,6 +67,11 @@ Task("Generate-Solution-Version")
         }
     }
 
+    if(AppVeyor.IsRunningOnAppVeyor)
+    {
+        build = AppVeyor.Environment.Build.Number.ToString();
+    }
+
     var assemblyVersion = string.Format("{0}.{1}", major, minor);
     var fullVersion = string.Format("{0}.{1}.{2}.{3}", major, minor, revision, build);
 
@@ -90,6 +95,7 @@ Task("Generate-Solution-Version")
     var file = "./src/SolutionVersion.cs";
     CreateAssemblyInfo(file, asmInfo);
 
+    Information("AssemblyVersion is '{0}'", infoVersion);
 });
 
 //////////////////////////////////////////////////////////////////////
