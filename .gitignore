@@ -3,7 +3,9 @@
 [Oo]bj/
 [Cc]ake/
 [Nn]uget.exe
+[Nn]uget/
 [Nn][Uu]nit*/
+
 # mstest test results
 TestResults
 

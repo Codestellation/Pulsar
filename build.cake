@@ -5,6 +5,11 @@
 var configurationName = "Release";
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", configurationName);
+
+var packageVersion = string.Empty;
+var product = "Codestellation.Pulsar";
+var copyright = string.Format("Copyright (c) Codestellation Team 2015 - {0}", DateTime.Now.Year);
+
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
 //////////////////////////////////////////////////////////////////////
@@ -12,6 +17,7 @@ var configuration = Argument("configuration", configurationName);
 // Define directories.
 var buildDirInfo = new DirectoryInfo("./build");
 var buildDir = Directory(buildDirInfo.FullName);
+var nugetDir = Directory("./nuget");
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -21,6 +27,7 @@ Task("Clean")
     .Does(() =>
 {
     CleanDirectory(buildDir);
+    CleanDirectory(nugetDir);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -75,7 +82,7 @@ Task("Generate-Solution-Version")
     var assemblyVersion = string.Format("{0}.{1}", major, minor);
     var fullVersion = string.Format("{0}.{1}.{2}.{3}", major, minor, revision, build);
 
-    var packageVersion = fullVersion;
+    packageVersion = fullVersion;
     if(!string.IsNullOrWhiteSpace(dirty))
     {
         packageVersion += ("-" + dirty);
@@ -85,11 +92,11 @@ Task("Generate-Solution-Version")
 
     var asmInfo = new AssemblyInfoSettings
     {
-        Product = "Codestellation.Pulsar",
+        Product = product,
         Version = assemblyVersion,
         FileVersion = fullVersion,
         InformationalVersion = infoVersion,
-        Copyright = string.Format("Copyright (c) Codestellation Team 2015 - {0}", DateTime.Now.Year)
+        Copyright = copyright
     };
 
     var file = "./src/SolutionVersion.cs";
@@ -138,6 +145,40 @@ Task("Test")
      var settings = new NUnitSettings { ToolPath = nunitPath.FullName };
      NUnit(testsAssembly, settings);
 });
+
+
+//////////////////////////////////////////////////////////////////////
+
+Task("Pack")
+    .IsDependentOn("Test")
+    .Does(() =>
+{
+
+var nuGetPackSettings   = new NuGetPackSettings {
+    Id                      = product,
+    Version                 = packageVersion,
+    Title                   = "Codestellation Pulsar",
+    Authors                 = new[] {"Jury Soldatenkov"},
+    Owners                  = new[] {"Codestellation Team"},
+    Description             = "Lean scheduler abstraction over timers for using task. Supports cron expressions.",
+    //Summary                 = "Excellent summare of what the package does",
+    ProjectUrl              = new Uri("https://github.com/Codestellation/Pulsar"),
+    //IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuget/master/icons/testnuget.png"),
+    LicenseUrl              = new Uri("https://github.com/Codestellation/Pulsar/blob/master/license.txt"),
+    Copyright               = copyright,
+    //ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
+    Tags                    = new [] {"Cron", "Task", "Scheduler", "Timer"},
+    RequireLicenseAcceptance= false,
+    Symbols                 = false,
+    //NoPackageAnalysis       = true,
+    Files                   = new [] { new NuSpecContent {Source = "Codestellation.Pulsar.???", Target = "lib/portable-net451+win81+wpa81"}, },
+    BasePath                = "./build",
+    OutputDirectory         = "./nuget"
+};
+
+NuGetPack("./src/Pulsar/pulsar.nuspec", nuGetPackSettings);
+});
+
 
 
 //////////////////////////////////////////////////////////////////////
