@@ -179,6 +179,20 @@ var nuGetPackSettings   = new NuGetPackSettings {
 NuGetPack("./src/Pulsar/pulsar.nuspec", nuGetPackSettings);
 });
 
+Task("Push")
+    .IsDependentOn("Pack")
+    .Does(() =>
+{
+
+  // Get the path to the package.
+  var package = string.Format("./nuget/{0}.{1}.nupkg", product, packageVersion);
+
+  // Push the package.
+  NuGetPush(package, new NuGetPushSettings {
+      Source = "https://www.myget.org/F/codestellation/api/v2/package",
+      ApiKey = EnvironmentVariable("myget_key")
+  });
+});
 
 
 //////////////////////////////////////////////////////////////////////
