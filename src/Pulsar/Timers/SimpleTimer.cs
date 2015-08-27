@@ -9,6 +9,11 @@ namespace Codestellation.Pulsar.Timers
         {
             var fireSince = startAt - Clock.UtcNow;
 
+            if (fireSince < TimeSpan.Zero)
+            {
+                fireSince = TimeSpan.Zero;
+            }
+
             var intervalInternal = interval ?? TimeSpan.Zero;
 
             SetupInternalTimer(fireSince, intervalInternal);

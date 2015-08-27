@@ -50,6 +50,7 @@
     <Compile Include="Cron\TimeFieldTests.cs" />
     <Compile Include="ScratchPad.cs" />
     <Compile Include="TestTask.cs" />
+    <Compile Include="Timers\TimerTests.cs" />
     <Compile Include="Triggers\ManualTriggerTests.cs" />
     <Compile Include="Scheulders\PulsarSchedulerTests.cs" />
     <None Include="App.config" />

@@ -4,13 +4,16 @@ namespace Codestellation.Pulsar.Misc
 {
     public static class Clock
     {
-        private static readonly Func<DateTime> DefaultUtcNow = () => DateTime.Now;
+        private static readonly Func<DateTime> DefaultUtcNow;
         private static Func<DateTime> _utcNow = DefaultUtcNow;
 
-        public static DateTime UtcNow
+        static Clock()
         {
-            get { return _utcNow(); }
+            DefaultUtcNow = () => DateTime.UtcNow;
+            UtcNowFunction = DefaultUtcNow;
         }
+
+        public static DateTime UtcNow => _utcNow();
 
         public static Func<DateTime> UtcNowFunction
         {
@@ -19,18 +22,23 @@ namespace Codestellation.Pulsar.Misc
             {
                 if (value == null)
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 var probe = value();
 
                 if (probe.Kind != DateTimeKind.Utc)
                 {
-                    throw new ArgumentException("Delegate must return UTC date time", "value");
+                    throw new ArgumentException("Delegate must return UTC date time", nameof(value));
                 }
 
                 _utcNow = value;
             }
+        }
+
+        public static void UseDefault()
+        {
+            UtcNowFunction = DefaultUtcNow;
         }
     }
 }

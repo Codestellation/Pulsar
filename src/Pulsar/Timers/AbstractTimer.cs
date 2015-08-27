@@ -21,7 +21,14 @@ namespace Codestellation.Pulsar.Timers
                 throw new ArgumentOutOfRangeException(nameof(interval), interval, "Value should be greater than or equal to zero.");
             }
 
-            SetupInternal(startAt, interval);
+            if (startAt.Kind == DateTimeKind.Unspecified)
+            {
+                throw new ArgumentException("Datetime kind must not be " + nameof(DateTimeKind.Local) + " or " + nameof(DateTimeKind.Utc));
+            }
+
+            var startAtUtc = startAt.Kind == DateTimeKind.Local ? startAt.ToUniversalTime() : startAt;
+
+            SetupInternal(startAtUtc, interval);
         }
 
         public void Stop()
@@ -31,9 +38,9 @@ namespace Codestellation.Pulsar.Timers
 
         protected abstract void SetupInternal(DateTime startAt, TimeSpan? interval);
 
-        protected void SetupInternalTimer(TimeSpan fireAt, TimeSpan interval)
+        protected void SetupInternalTimer(TimeSpan fireAfter, TimeSpan interval)
         {
-            _internalTimer.Change(fireAt, interval);
+            _internalTimer.Change(fireAfter, interval);
         }
 
         protected abstract void OnInternalTimerFired();
