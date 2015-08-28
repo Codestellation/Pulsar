@@ -124,6 +124,7 @@ Task("Build")
     MSBuild("./src/Pulsar.sln", settings => {
       settings.SetConfiguration(configuration);
       settings.Properties["OutDir"] = new List<string>{ buildDirInfo.FullName };
+      settings.Verbosity = Verbosity.Minimal;
       });
 });
 
