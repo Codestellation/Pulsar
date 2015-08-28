@@ -2,6 +2,9 @@
 
 namespace Codestellation.Pulsar.Misc
 {
+    /// <summary>
+    /// Used internally by timers and triggers to define moment to fire. May be used for test purposes. 
+    /// </summary>
     public static class Clock
     {
         private static readonly Func<DateTime> DefaultUtcNow;
@@ -13,8 +16,14 @@ namespace Codestellation.Pulsar.Misc
             UtcNowFunction = DefaultUtcNow;
         }
 
+        /// <summary>
+        /// Returns current UTC <see cref="DateTime"/>
+        /// </summary>
         public static DateTime UtcNow => _utcNow();
 
+        /// <summary>
+        /// Gets or sets delegate to generate <see cref="UtcNow"/>. 
+        /// </summary>
         public static Func<DateTime> UtcNowFunction
         {
             get { return _utcNow; }
@@ -36,6 +45,9 @@ namespace Codestellation.Pulsar.Misc
             }
         }
 
+        /// <summary>
+        /// Restores default UtcNow functions <see cref="DateTime.UtcNow"/>
+        /// </summary>
         public static void UseDefault()
         {
             UtcNowFunction = DefaultUtcNow;
