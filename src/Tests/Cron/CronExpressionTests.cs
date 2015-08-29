@@ -52,6 +52,19 @@ namespace Codestellation.Pulsar.Tests.Cron
             Assert.That(nearest.Value, Is.EqualTo(expected));
         }
 
+
+        [TestCase(DateTimeKind.Utc)]
+        [TestCase(DateTimeKind.Local)]
+        [TestCase(DateTimeKind.Unspecified)]
+        public void Should_return_same_date_time_kind_as_was_supplied(DateTimeKind expected)
+        {
+            var datetime = new DateTime(2012, 10, 15, 10, 0, 0, expected).AddMilliseconds(100);
+            var expression = new CronExpression("* 0 10 * * ?");
+            var nearest = expression.NearestAfter(datetime);
+            var actual = nearest.Value;
+            Assert.That(actual.Kind, Is.EqualTo(expected));
+        }
+
         [Test]
         public void Perfomance_test_worst_case()
         {

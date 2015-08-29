@@ -3,17 +3,29 @@ using System.Collections.Generic;
 
 namespace Codestellation.Pulsar.Cron
 {
+    /// <summary>
+    /// Computes date time occurrences using cron expression
+    /// </summary>
     public class CronExpression
     {
-        private SimpleCronField _year;
-        private CronCalendarBuilder _builder;
-        private CronDaySchedule _daySchedule;
-        private Dictionary<int, CronCalendar> _calendars;
-        private int _minYear;
-        private int _maxYear;
+        private readonly SimpleCronField _year;
+        private readonly CronCalendarBuilder _builder;
+        private readonly CronDaySchedule _daySchedule;
+        private readonly Dictionary<int, CronCalendar> _calendars;
+        private readonly int _minYear;
+        private readonly int _maxYear;
 
+        /// <summary>
+        /// Initiaze new instace of <see cref="CronExpression"/>
+        /// </summary>
+        /// <param name="value">Actual expression value</param>
         public CronExpression(string value)
         {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException("Must be neither null nor empty string", nameof(value));
+            }
+
             var tokens = CronParser.Tokenize(value, CronSymbols.Space);
 
             if (tokens.Length < 6 || 7 < tokens.Length)
@@ -26,9 +38,8 @@ namespace Codestellation.Pulsar.Cron
             var seconds = SimpleCronField.ParseSeconds(tokens[0]);
             var minutes = SimpleCronField.ParseMinutes(tokens[1]);
             var hours = SimpleCronField.ParseHours(tokens[2]);
-            
-            _daySchedule = new CronDaySchedule(seconds, minutes, hours);
 
+            _daySchedule = new CronDaySchedule(seconds, minutes, hours);
 
             var dayOfMonth = new DayOfMonthField(tokens[3]);
             var month = SimpleCronField.ParseMonth(tokens[4]);
@@ -52,33 +63,39 @@ namespace Codestellation.Pulsar.Cron
             }
         }
 
+        /// <summary>
+        /// Returns nearest occurence of fafadfa
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
         public DateTime? NearestAfter(DateTime point)
         {
+            var kind = point.Kind;
             var currentPoint = point;
             var milliseconds = point.Millisecond;
             if (milliseconds > 0)
             {
                 currentPoint = currentPoint.AddMilliseconds(1000 - milliseconds);
             }
-            
+
             CronCalendar calendar;
             while (TryGetCalendar(currentPoint, out calendar))
             {
                 var currentPointDate = currentPoint.Date;
-                
+
                 if (calendar.ShouldFire(currentPointDate))
                 {
                     TimeSpan fireAt;
-                    if(_daySchedule.TryGetTimeAfter(currentPoint.TimeOfDay, out fireAt))
+                    if (_daySchedule.TryGetTimeAfter(currentPoint.TimeOfDay, out fireAt))
                     {
-                        return currentPointDate.Add(fireAt);
+                        return new DateTime(currentPointDate.Add(fireAt).Ticks, kind);
                     }
                 }
                 DateTime closest;
                 if (calendar.TryFindNextDay(currentPointDate, out closest))
                 {
                     var time = _daySchedule.MinTime;
-                    return closest.Add(time);
+                    return new DateTime(closest.Add(time).Ticks, kind);
                 }
 
                 currentPoint = CronDateHelper.BeginOfNextYear(currentPoint);
