@@ -1,4 +1,6 @@
-﻿using Codestellation.Pulsar.Schedulers;
+﻿using System;
+using System.Threading.Tasks;
+using Codestellation.Pulsar.Schedulers;
 using Codestellation.Pulsar.Triggers;
 using NUnit.Framework;
 
@@ -33,6 +35,30 @@ namespace Codestellation.Pulsar.Tests.Scheulders
             _trigger.Fire();
             //then
             Assert.That(_task.WaitForRun(), Is.True, "Task was not called in specifed scheduler");
+        }
+
+        [Test]
+        public void Should_not_run_task_twice_if_concurrent_execution_is_forbidden()
+        {
+            _task.Options.AllowConcurrentExecution = false;
+            _scheduler.Start();
+
+            var task = Task.Run(() =>
+            {
+                _trigger.Fire();
+                _trigger.Fire();
+            });
+
+            task.Wait();
+            _task.Finish();
+
+            if (task.IsFaulted)
+            {
+                Console.WriteLine(task.Exception);
+            }
+
+            Assert.That(_task.WaitForRun(), Is.True);
+            Assert.That(_task.CalledTimes, Is.EqualTo(1));
         }
     }
 }

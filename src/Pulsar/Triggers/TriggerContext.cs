@@ -10,7 +10,7 @@ namespace Codestellation.Pulsar.Triggers
         {
             if (trigger == null)
             {
-                throw new ArgumentNullException("trigger");
+                throw new ArgumentNullException(nameof(trigger));
             }
             Trigger = trigger;
         }

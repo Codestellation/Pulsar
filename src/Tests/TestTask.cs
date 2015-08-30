@@ -8,6 +8,7 @@ namespace Codestellation.Pulsar.Tests
     {
         private readonly HashSet<ITrigger> _triggers;
         private readonly AutoResetEvent _ran;
+        private readonly AutoResetEvent _finished;
         public int CalledTimes;
 
         public TestTask()
@@ -18,6 +19,7 @@ namespace Codestellation.Pulsar.Tests
             Options = new TaskOptions();
 
             _ran = new AutoResetEvent(false);
+            _finished = new AutoResetEvent(false);
         }
 
         public Guid Id { get; set; }
@@ -38,12 +40,18 @@ namespace Codestellation.Pulsar.Tests
         {
             Interlocked.Increment(ref CalledTimes);
             _ran.Set();
+            _finished.WaitOne();
         }
 
         public bool WaitForRun(TimeSpan? timeout = null)
         {
             TimeSpan realTimeOut = timeout ?? TimeSpan.FromSeconds(5);
             return _ran.WaitOne(realTimeOut);
+        }
+
+        public void Finish()
+        {
+            _finished.Set();
         }
     }
 }
