@@ -7,18 +7,34 @@ namespace Codestellation.Pulsar.Schedulers
 {
     public class PulsarScheduler : AbstractScheduler
     {
-        private readonly ConcurrentDictionary<Guid, ITask> _tasks;
+        private readonly ConcurrentDictionary<Guid, TaskWrap> _tasks;
 
+        /// <summary>
+        /// Initialized new instance of <see cref="PulsarScheduler"/>
+        /// </summary>
         public PulsarScheduler()
         {
-            _tasks = new ConcurrentDictionary<Guid, ITask>();
+            _tasks = new ConcurrentDictionary<Guid, TaskWrap>();
         }
 
-        public override IEnumerable<ITask> Tasks => _tasks.Values;
+        /// <summary>
+        /// Enumerates all tasks attacked to scheduler
+        /// </summary>
+        public override IEnumerable<ITask> Tasks
+        {
+            get
+            {
+                foreach (var taskWrap in _tasks)
+                {
+                    yield return taskWrap.Value.Task;
+                }
+            }
+        }
 
         protected override void AddInternal(ITask task)
         {
-            if (!_tasks.TryAdd(task.Id, task))
+            var wrap = new TaskWrap(task, () => Started);
+            if (!_tasks.TryAdd(task.Id, wrap))
             {
                 throw new InvalidOperationException($"Task {task.Id} with id {task} already added.");
             }
@@ -29,18 +45,18 @@ namespace Codestellation.Pulsar.Schedulers
             }
             foreach (var trigger in task.Triggers)
             {
-                StartTrigger(task, trigger);
+                StartTrigger(wrap, trigger);
             }
         }
 
         protected override void RemoveInternal(ITask task)
         {
-            ITask removed;
+            TaskWrap removed;
             if (!_tasks.TryRemove(task.Id, out removed))
             {
                 return;
             }
-            foreach (var trigger in removed.Triggers)
+            foreach (var trigger in removed.Task.Triggers)
             {
                 trigger.Stop();
             }
@@ -50,7 +66,7 @@ namespace Codestellation.Pulsar.Schedulers
         {
             foreach (var task in _tasks.Values)
             {
-                foreach (var trigger in task.Triggers)
+                foreach (var trigger in task.Task.Triggers)
                 {
                     StartTrigger(task, trigger);
                 }
@@ -61,16 +77,16 @@ namespace Codestellation.Pulsar.Schedulers
         {
             foreach (var task in _tasks)
             {
-                foreach (var trigger in task.Value.Triggers)
+                foreach (var trigger in task.Value.Task.Triggers)
                 {
                     trigger.Stop();
                 }
             }
         }
 
-        private static void StartTrigger(ITask task, ITrigger trigger)
+        private static void StartTrigger(TaskWrap wrap, ITrigger trigger)
         {
-            TriggerCallback callback = context => task.Run();
+            TriggerCallback callback = wrap.OnTriggerCallback;
             trigger.Start(callback);
         }
     }

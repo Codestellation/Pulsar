@@ -9,16 +9,13 @@ namespace Codestellation.Pulsar.Schedulers
         private volatile bool _disposed;
         public abstract IEnumerable<ITask> Tasks { get; }
 
-        protected bool Started
-        {
-            get { return _started; }
-        }
+        protected bool Started => _started;
 
         public IScheduler Add(ITask task)
         {
             if (task == null)
             {
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
             }
             EnsureNotDisposed();
             AddInternal(task);
@@ -31,7 +28,7 @@ namespace Codestellation.Pulsar.Schedulers
         {
             if (task == null)
             {
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
             }
             EnsureNotDisposed();
             RemoveInternal(task);
