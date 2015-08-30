@@ -21,6 +21,11 @@ namespace Codestellation.Pulsar.Tasks
         public virtual string Title { get; protected set; }
 
         /// <summary>
+        /// Gets or sets task execution options
+        /// </summary>
+        public TaskOptions Options { get; }
+
+        /// <summary>
         /// Collection of <see cref="ITrigger"/> that fire  start task.
         /// </summary>
         public IEnumerable<ITrigger> Triggers => _triggers;
@@ -31,6 +36,7 @@ namespace Codestellation.Pulsar.Tasks
         protected AbstractTask()
         {
             _triggers = new HashSet<ITrigger>();
+            Options = new TaskOptions();
         }
 
         /// <summary>

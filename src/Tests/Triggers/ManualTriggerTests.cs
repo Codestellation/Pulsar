@@ -27,7 +27,7 @@ namespace Codestellation.Pulsar.Tests.Triggers
             //when
             _trigger.Fire();
             //then
-            _task.Wait().ShouldBe(false, "Task was called when trigger is not started");
+            _task.WaitForRun().ShouldBe(false, "Task was called when trigger is not started");
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace Codestellation.Pulsar.Tests.Triggers
             //when
             _trigger.Fire();
             //then
-            _task.Wait().ShouldBe(true, "Task was called when trigger is not started");
+            _task.WaitForRun().ShouldBe(true, "Task was called when trigger is not started");
         }
     }
 }

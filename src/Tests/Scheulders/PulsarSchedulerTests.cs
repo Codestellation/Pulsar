@@ -32,7 +32,7 @@ namespace Codestellation.Pulsar.Tests.Scheulders
             //when
             _trigger.Fire();
             //then
-            Assert.That(_task.Wait(), Is.True, "Task was not called in specifed scheduler");
+            Assert.That(_task.WaitForRun(), Is.True, "Task was not called in specifed scheduler");
         }
     }
 }

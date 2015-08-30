@@ -62,6 +62,7 @@
     <Compile Include="ITrigger.cs" />
     <Compile Include="Misc\Clock.cs" />
     <Compile Include="Schedulers\PulsarScheduler.cs" />
+    <Compile Include="TaskOptions.cs" />
     <Compile Include="Tasks\AbstractTask.cs" />
     <Compile Include="Tasks\ActionTask.cs" />
     <Compile Include="Timers\AbstractTimer.cs" />

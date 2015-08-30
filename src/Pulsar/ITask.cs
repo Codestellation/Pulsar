@@ -19,6 +19,11 @@ namespace Codestellation.Pulsar
         string Title { get; }
 
         /// <summary>
+        /// Returns task options
+        /// </summary>
+        TaskOptions Options { get; }
+
+        /// <summary>
         /// Collection of <see cref="ITrigger"/> that fire  start task.
         /// </summary>
         IEnumerable<ITrigger> Triggers { get; }
