@@ -14,11 +14,6 @@ namespace Codestellation.Pulsar
         Guid Id { get; }
 
         /// <summary>
-        /// Human readable task name.
-        /// </summary>
-        string Title { get; }
-
-        /// <summary>
         /// Returns task options
         /// </summary>
         TaskOptions Options { get; }

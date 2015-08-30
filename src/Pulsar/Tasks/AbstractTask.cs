@@ -16,11 +16,6 @@ namespace Codestellation.Pulsar.Tasks
         public virtual Guid Id { get; protected set; }
 
         /// <summary>
-        /// Human readable task name.
-        /// </summary>
-        public virtual string Title { get; protected set; }
-
-        /// <summary>
         /// Gets or sets task execution options
         /// </summary>
         public TaskOptions Options { get; }

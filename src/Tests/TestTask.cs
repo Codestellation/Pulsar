@@ -14,17 +14,18 @@ namespace Codestellation.Pulsar.Tests
         public TestTask()
         {
             Id = Guid.NewGuid();
-            Title = $"Test task {Id}";
+
             _triggers = new HashSet<ITrigger>();
-            Options = new TaskOptions();
+            Options = new TaskOptions
+            {
+                Title = $"Test task {Id}"
+            };
 
             _ran = new AutoResetEvent(false);
             _finished = new AutoResetEvent(false);
         }
 
         public Guid Id { get; set; }
-
-        public string Title { get; set; }
 
         public TaskOptions Options { get; }
 

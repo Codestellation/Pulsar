@@ -12,9 +12,8 @@ namespace Codestellation.Pulsar.Tasks
         /// <summary>
         /// Initialize new instance of <see cref="ActionTask"/> class
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="action"></param>
-        public ActionTask(Action action, string name = null)
+        public ActionTask(Action action)
         {
             if (action == null)
             {
@@ -22,7 +21,6 @@ namespace Codestellation.Pulsar.Tasks
             }
             _action = action;
             Id = Guid.NewGuid();
-            Title = string.IsNullOrWhiteSpace(name) ? $"Task {Id}" : name;
         }
 
         /// <summary>
