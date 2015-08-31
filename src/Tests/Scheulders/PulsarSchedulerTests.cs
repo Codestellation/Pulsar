@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Codestellation.Pulsar.Schedulers;
 using Codestellation.Pulsar.Triggers;
@@ -50,6 +51,7 @@ namespace Codestellation.Pulsar.Tests.Scheulders
             });
 
             task.Wait();
+            Thread.Sleep(10);
             _task.Finish();
 
             if (task.IsFaulted)
