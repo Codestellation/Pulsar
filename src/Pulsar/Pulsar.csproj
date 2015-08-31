@@ -42,6 +42,7 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="Extensions\SchedulerExtensions.cs" />
     <Compile Include="Schedulers\AbstractScheduler.cs" />
     <Compile Include="Cron\CronCalendar.cs" />
     <Compile Include="Cron\CronCalendarBuilder.cs" />

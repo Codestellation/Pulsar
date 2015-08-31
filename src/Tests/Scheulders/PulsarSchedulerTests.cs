@@ -51,7 +51,7 @@ namespace Codestellation.Pulsar.Tests.Scheulders
             });
 
             task.Wait();
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
             _task.Finish();
 
             if (task.IsFaulted)
