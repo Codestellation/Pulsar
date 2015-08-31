@@ -27,7 +27,10 @@ scheduler.Start();
 
 And the same but Using fluent API to generate task.
 ```
-To be done
+var scheduler = new PulsarScheduler();
+scheduler
+    .StartTask(() => Console.WriteLine("Hello World"))
+    .UseCron(" * 0 10 * * ? ");
 ```
 
 # How to contribute
