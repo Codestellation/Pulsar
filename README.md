@@ -34,3 +34,7 @@ scheduler
 ```
 
 # How to contribute
+
+* Use core.autocrlf=True
+* Use spaces instead of tabs
+* Use [Allman ident style](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
