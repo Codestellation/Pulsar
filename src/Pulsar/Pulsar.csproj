@@ -42,7 +42,9 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
-    <Compile Include="Extensions\SchedulerExtensions.cs" />
+    <Compile Include="FluentApi\Repeat.cs" />
+    <Compile Include="FluentApi\SchedulerExtensions.cs" />
+    <Compile Include="FluentApi\Start.cs" />
     <Compile Include="Schedulers\AbstractScheduler.cs" />
     <Compile Include="Cron\CronCalendar.cs" />
     <Compile Include="Cron\CronCalendarBuilder.cs" />

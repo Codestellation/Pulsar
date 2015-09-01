@@ -48,7 +48,7 @@
     <Compile Include="Cron\DayOfMonthFieldTests.cs" />
     <Compile Include="Cron\DayOfWeekFieldTests.cs" />
     <Compile Include="Cron\TimeFieldTests.cs" />
-    <Compile Include="Extensions\PulsarSchedulerTests.cs" />
+    <Compile Include="FluentApi\SchedulerExtensionsTests.cs" />
     <Compile Include="ScratchPad.cs" />
     <Compile Include="TestTask.cs" />
     <Compile Include="Timers\TimerTests.cs" />
