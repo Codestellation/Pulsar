@@ -13,24 +13,19 @@ namespace Codestellation.Pulsar.Cron
 
         public static int ParseNumber(string token, ref int index, int min, int max)
         {
-            if (char.IsDigit(token[index]))
+            int result = 0;
+            do
             {
-                var result = ParseDigit(token[index]);
+                result *= 10;
+                result += ParseDigit(token[index]);
                 index++;
-                if (index < token.Length && char.IsDigit(token[index]))
-                {
-                    result = result * 10 + ParseDigit(token[index]);
-                    index++;
-                }
+            } while (index < token.Length && char.IsDigit(token[index]));
 
-                if (result < min || max < result)
-                {
-                    throw new FormatException();
-                }
-                return result;
+            if (result < min || max < result)
+            {
+                throw new FormatException();
             }
-
-            throw new FormatException();
+            return result;
         }
 
         private static int ParseDigit(char value)
