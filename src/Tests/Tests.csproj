@@ -41,6 +41,7 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="Cron\CronExpressionBuilderTests.cs" />
     <Compile Include="Cron\CronCalendarBuilderTests.cs" />
     <Compile Include="Cron\CronDayScheduleTests.cs" />
     <Compile Include="Cron\CronExpressionTests.cs" />

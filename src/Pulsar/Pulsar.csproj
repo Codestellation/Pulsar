@@ -74,6 +74,7 @@
     <Compile Include="Timers\PreciseTimer.cs" />
     <Compile Include="Timers\SimpleTimer.cs" />
     <Compile Include="Timers\StubTimer.cs" />
+    <Compile Include="Cron\CronExpressionBuilder.cs" />
     <Compile Include="Triggers\TriggerCallback.cs" />
     <Compile Include="Triggers\TriggerContext.cs" />
     <Compile Include="Triggers\AbstractTrigger.cs" />

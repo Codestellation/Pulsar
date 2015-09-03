@@ -5,7 +5,7 @@ using Codestellation.Pulsar.Schedulers;
 using Codestellation.Pulsar.Triggers;
 using NUnit.Framework;
 
-namespace Codestellation.Pulsar.Tests.Extensions
+namespace Codestellation.Pulsar.Tests.FluentApi
 {
     [TestFixture]
     public class PulsarSchedulerTests
