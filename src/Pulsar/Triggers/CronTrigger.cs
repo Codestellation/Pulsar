@@ -11,27 +11,53 @@ namespace Codestellation.Pulsar.Triggers
     public class CronTrigger : TimerTrigger
     {
         private readonly CronExpression _cronExpression;
+        private readonly TimeZoneInfo _timeZone;
 
         /// <summary>
         /// Returns nearest timer to fire
         /// </summary>
-        public DateTime? NextFireAt => _cronExpression.NearestAfter(Clock.UtcNow);
+        public DateTime? NextFireAt
+        {
+            get
+            {
+                DateTime utcNow = Clock.UtcNow;
+                DateTime zoneNow = TimeZoneInfo.ConvertTime(utcNow, _timeZone);
+
+                DateTime? zoneNearest = _cronExpression.NearestAfter(zoneNow);
+                if (!zoneNearest.HasValue)
+                {
+                    return null;
+                }
+
+                TimeSpan offset = _timeZone.GetUtcOffset(zoneNearest.Value);
+                DateTime nextFireAt = zoneNearest.Value - offset;
+                return nextFireAt;
+            }
+        }
 
         /// <summary>
         /// Initialize new instance of <see cref="CronTrigger"/>
         /// </summary>
         /// <param name="cronExpression">Should be valid cron expression</param>
-        /// <param name="timer"></param>
-        public CronTrigger(string cronExpression, ITimer timer)
-            : this(new CronExpression(cronExpression), timer)
+        /// <param name="timeZone">Forces cron trigger to fire on time in specified  <see cref="TimeZoneInfo"/></param>
+        /// <param name="timer">Timer implementation
+        /// <remarks>It's recommended to use <see cref="PreciseTimer"/> for long intervals to avoid timer drift issues</remarks>
+        /// </param>
+        public CronTrigger(string cronExpression, TimeZoneInfo timeZone, ITimer timer)
+            : this(new CronExpression(cronExpression), timeZone, timer)
         {
         }
 
         /// <summary>
         /// Initialize new instance of <see cref="CronTrigger"/>
         /// </summary>
+        /// <param name="cronExpression">Should be valid cron expression</param>
+        /// <param name="timeZone">Forces cron trigger to fire on time in specified  <see cref="TimeZoneInfo"/></param>
+        /// <param name="timer">Timer implementation
+        /// <remarks>It's recommended to use <see cref="PreciseTimer"/> for long intervals to avoid timer drift issues</remarks>
+        /// </param>
         /// <exception cref="ArgumentNullException"></exception>
-        public CronTrigger(CronExpression cronExpression, ITimer timer)
+        public CronTrigger(CronExpression cronExpression, TimeZoneInfo timeZone, ITimer timer)
             : base(timer)
         {
             if (cronExpression == null)
@@ -39,7 +65,13 @@ namespace Codestellation.Pulsar.Triggers
                 throw new ArgumentNullException(nameof(cronExpression));
             }
 
+            if (timeZone == null)
+            {
+                throw new ArgumentNullException(nameof(timeZone));
+            }
+
             _cronExpression = cronExpression;
+            _timeZone = timeZone;
         }
 
         /// <summary>

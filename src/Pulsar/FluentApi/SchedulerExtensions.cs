@@ -33,7 +33,7 @@ namespace Codestellation.Pulsar.FluentApi
         /// <summary>
         /// Adds cron trigger to <see cref="AbstractTask"/>
         /// </summary>
-        public static void UseCron(this AbstractTask self, string cronExpression, ITimer timer = null)
+        public static void UseCron(this AbstractTask self, string cronExpression, ITimer timer = null, TimeZoneInfo timeZone = null)
         {
             if (self == null)
             {
@@ -41,7 +41,8 @@ namespace Codestellation.Pulsar.FluentApi
             }
 
             timer = timer ?? new PreciseTimer();
-            var trigger = new CronTrigger(cronExpression, timer);
+            timeZone = timeZone ?? TimeZoneInfo.Local;
+            var trigger = new CronTrigger(cronExpression, timeZone, timer);
 
             self.AddTrigger(trigger);
         }
