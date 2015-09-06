@@ -4,6 +4,10 @@ using Codestellation.Pulsar.Misc;
 
 namespace Codestellation.Pulsar.Timers
 {
+    /// <summary>
+    /// Similar to <see cref="SimpleTimer"/> but has reduced drift effect.
+    /// <remarks>http://stackoverflow.com/questions/8431995/c-sharp-net-2-threading-timer-time-drifting</remarks>
+    /// </summary>
     public class PreciseTimer : AbstractTimer
     {
         private static readonly TimeSpan MaxTimerInterval = TimeSpan.FromMinutes(1);
@@ -12,6 +16,11 @@ namespace Codestellation.Pulsar.Timers
         private TimeSpan? _interval;
         private DateTime _nextStartat;
 
+        /// <summary>
+        /// Sets next timer to fire from for internal timer
+        /// </summary>
+        /// <param name="startAt">First time to start at</param>
+        /// <param name="interval">Repeat interval</param>
         protected override void SetupInternal(DateTime startAt, TimeSpan? interval)
         {
             _firstStartAt = startAt;
@@ -23,13 +32,16 @@ namespace Codestellation.Pulsar.Timers
             SetupInternalTimer(fireAfter, TimeSpan.Zero);
         }
 
+        /// <summary>
+        /// Called when internal timer fires.
+        /// </summary>
         protected override void OnInternalTimerFired()
         {
             var fireAfter = CalculateFireAfter();
 
             if (fireAfter <= TimeSpan.Zero)
             {
-                Task.Run((Action)Callback);
+                Task.Run((Action)RaiseOnFired);
                 if (_interval.HasValue)
                 {
                     _nextStartat += _interval.Value;
