@@ -9,6 +9,7 @@ namespace Codestellation.Pulsar.Timers
     public abstract class AbstractTimer : ITimer, IDisposable
     {
         private readonly Timer _internalTimer;
+        private bool _disposed;
 
         /// <summary>
         /// Called when internal timer fires
@@ -30,6 +31,7 @@ namespace Codestellation.Pulsar.Timers
         /// <param name="interval">Interval. Should positive or zero or null</param>
         public void Fire(DateTime startAt, TimeSpan? interval = null)
         {
+            EnsureNotDisposed();
             if (interval < TimeSpan.Zero)
             {
                 throw new ArgumentOutOfRangeException(nameof(interval), interval, "Value should be greater than or equal to zero.");
@@ -50,7 +52,10 @@ namespace Codestellation.Pulsar.Timers
         /// </summary>
         public void Stop()
         {
-            _internalTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            if (!_disposed)
+            {
+                _internalTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            }
         }
 
         /// <summary>
@@ -63,7 +68,10 @@ namespace Codestellation.Pulsar.Timers
         /// </summary>
         protected void SetupInternalTimer(TimeSpan fireAfter, TimeSpan interval)
         {
-            _internalTimer.Change(fireAfter, interval);
+            if (!_disposed)
+            {
+                _internalTimer.Change(fireAfter, interval);
+            }
         }
 
         /// <summary>
@@ -76,7 +84,10 @@ namespace Codestellation.Pulsar.Timers
         /// </summary>
         protected void RaiseOnFired()
         {
-            Volatile.Read(ref OnFired)?.Invoke();
+            if (!_disposed)
+            {
+                Volatile.Read(ref OnFired)?.Invoke();
+            }
         }
 
         /// <summary>
@@ -84,7 +95,19 @@ namespace Codestellation.Pulsar.Timers
         /// </summary>
         public virtual void Dispose()
         {
-            _internalTimer.Dispose();
+            if (!_disposed)
+            {
+                _disposed = true;
+                _internalTimer.Dispose();
+            }
+        }
+
+        private void EnsureNotDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException("Timer disposed");
+            }
         }
     }
 }

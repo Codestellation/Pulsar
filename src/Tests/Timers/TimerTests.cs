@@ -68,6 +68,27 @@ namespace Codestellation.Pulsar.Tests.Timers
             Assert.That(counter, Is.GreaterThan(5));
         }
 
+        [Test]
+        public void Should_not_fail_on_double_dispose()
+        {
+            _timer.Dispose();
+            Assert.DoesNotThrow(() => _timer.Dispose());
+        }
+
+        [Test]
+        public void Should_not_fail_on_stop_if_dispose()
+        {
+            _timer.Dispose();
+            Assert.DoesNotThrow(() => _timer.Stop());
+        }
+
+        [Test]
+        public void Should_throw_if_disposed()
+        {
+            _timer.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => _timer.Fire(DateTime.UtcNow));
+        }
+
         [TearDown]
         public void RepairClock()
         {
