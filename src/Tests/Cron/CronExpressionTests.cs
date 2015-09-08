@@ -72,7 +72,7 @@ namespace Codestellation.Pulsar.Tests.Cron
         }
 
         [Test]
-        public void Perfomance_test_worst_case()
+        public void Performance_test_worst_case()
         {
             var expression = new CronExpression("* * * * * ?");
             var datetime = new DateTime(2012, 12, 31, 23, 59, 59);
@@ -97,7 +97,7 @@ namespace Codestellation.Pulsar.Tests.Cron
         }
 
         [Test]
-        public void Perfomance_test_best_case()
+        public void Performance_test_best_case()
         {
             var expression = new CronExpression("0 0 0 1 * ?");
             var datetime = new DateTime(2012, 1, 1, 0, 0, 0);
