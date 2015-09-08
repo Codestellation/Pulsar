@@ -1,4 +1,5 @@
 ﻿using System;
+using Codestellation.Pulsar.Misc;
 
 namespace Codestellation.Pulsar.Timers
 {
@@ -8,7 +9,7 @@ namespace Codestellation.Pulsar.Timers
     public interface ITimer
     {
         /// <summary>
-        /// Fires on time is come.
+        /// Fires when time is come.
         /// </summary>
         event Action OnFired;
 
@@ -17,7 +18,7 @@ namespace Codestellation.Pulsar.Timers
         /// </summary>
         /// <param name="startAt">First datetime when timers must fire. Must be UTC or local.</param>
         /// <remarks>
-        /// if  is below or equal to  <see cref="Pulsar.Clock"/>
+        /// if  is below or equal to  <see cref="Clock"/>
         /// </remarks>
         /// <param name="interval">Period of timer </param>
         void Fire(DateTime startAt, TimeSpan? interval = null);
