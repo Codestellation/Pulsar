@@ -5,9 +5,11 @@ using Codestellation.Pulsar.Triggers;
 
 namespace Codestellation.Pulsar.Schedulers
 {
-    public class PulsarScheduler : AbstractScheduler
+    public class PulsarScheduler : IScheduler, IDisposable, ISchedulerController
     {
         private readonly ConcurrentDictionary<Guid, TaskWrap> _tasks;
+        private volatile bool _started;
+        private volatile bool _disposed;
 
         /// <summary>
         /// Initialized new instance of <see cref="PulsarScheduler"/>
@@ -20,7 +22,7 @@ namespace Codestellation.Pulsar.Schedulers
         /// <summary>
         /// Enumerates all tasks attacked to scheduler
         /// </summary>
-        public override IEnumerable<ITask> Tasks
+        public IEnumerable<ITask> Tasks
         {
             get
             {
@@ -31,39 +33,61 @@ namespace Codestellation.Pulsar.Schedulers
             }
         }
 
-        protected override void AddInternal(ITask task)
+        private static void StartTrigger(TaskWrap wrap, ITrigger trigger)
         {
-            var wrap = new TaskWrap(task, () => Started);
+            TriggerCallback callback = wrap.OnTriggerCallback;
+            trigger.Start(callback);
+        }
+
+        public IScheduler Add(ITask task)
+        {
+            if (task == null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+            EnsureNotDisposed();
+            var wrap = new TaskWrap(task, () => _started);
             if (!_tasks.TryAdd(task.Id, wrap))
             {
                 throw new InvalidOperationException($"Task {task.Id} with id {task} already added.");
             }
 
-            if (!Started)
+            if (!_started)
             {
-                return;
+                return this;
             }
+
             foreach (var trigger in task.Triggers)
             {
                 StartTrigger(wrap, trigger);
             }
+            return this;
         }
 
-        protected override void RemoveInternal(ITask task)
+        public IScheduler Remove(ITask task)
         {
+            if (task == null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+            EnsureNotDisposed();
             TaskWrap removed;
             if (!_tasks.TryRemove(task.Id, out removed))
             {
-                return;
+                return this;
             }
             foreach (var trigger in removed.Task.Triggers)
             {
                 trigger.Stop();
             }
+            return this;
         }
 
-        protected override void StartInternal()
+        public void Start()
         {
+            EnsureNotDisposed();
+            _started = true;
+
             foreach (var task in _tasks.Values)
             {
                 foreach (var trigger in task.Task.Triggers)
@@ -73,8 +97,11 @@ namespace Codestellation.Pulsar.Schedulers
             }
         }
 
-        protected override void StopInternal()
+        public void Stop()
         {
+            EnsureNotDisposed();
+            _started = false;
+
             foreach (var task in _tasks)
             {
                 foreach (var trigger in task.Value.Task.Triggers)
@@ -84,10 +111,22 @@ namespace Codestellation.Pulsar.Schedulers
             }
         }
 
-        private static void StartTrigger(TaskWrap wrap, ITrigger trigger)
+        public void Dispose()
         {
-            TriggerCallback callback = wrap.OnTriggerCallback;
-            trigger.Start(callback);
+            if (_disposed)
+            {
+                return;
+            }
+            _disposed = true;
+            Stop();
+        }
+
+        private void EnsureNotDisposed()
+        {
+            if (_disposed)
+            {
+                throw new InvalidOperationException("Scheduler was disposed");
+            }
         }
     }
 }
