@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Codestellation.Pulsar.Triggers;
 
 namespace Codestellation.Pulsar.Schedulers
 {
     public class PulsarScheduler : IScheduler, IDisposable, ISchedulerController
     {
-        private readonly ConcurrentDictionary<Guid, TaskWrap> _tasks;
+        private readonly ConcurrentDictionary<Guid, SchedulerTask> _tasks;
         private volatile bool _started;
         private volatile bool _disposed;
 
@@ -16,7 +15,7 @@ namespace Codestellation.Pulsar.Schedulers
         /// </summary>
         public PulsarScheduler()
         {
-            _tasks = new ConcurrentDictionary<Guid, TaskWrap>();
+            _tasks = new ConcurrentDictionary<Guid, SchedulerTask>();
         }
 
         /// <summary>
@@ -26,61 +25,48 @@ namespace Codestellation.Pulsar.Schedulers
         {
             get
             {
-                foreach (var taskWrap in _tasks)
+                foreach (var task in _tasks)
                 {
-                    yield return taskWrap.Value.Task;
+                    yield return task.Value;
                 }
             }
         }
 
-        private static void StartTrigger(TaskWrap wrap, ITrigger trigger)
+        /// <summary>
+        /// Initializes new task instance and adds it to scheduler collection
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public ITask Create(TaskOptions options)
         {
-            TriggerCallback callback = wrap.OnTriggerCallback;
-            trigger.Start(callback);
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+            EnsureNotDisposed();
+
+            var task = new SchedulerTask(options, () => _started);
+
+            _tasks.TryAdd(task.Options.Id, task);
+
+            return task;
         }
 
-        public IScheduler Add(ITask task)
+        /// <summary>
+        /// Removes task from scheduler
+        /// </summary>
+        public void Delete(ITask task)
         {
             if (task == null)
             {
                 throw new ArgumentNullException(nameof(task));
             }
             EnsureNotDisposed();
-            var wrap = new TaskWrap(task, () => _started);
-            if (!_tasks.TryAdd(task.Id, wrap))
+            SchedulerTask removed;
+            if (!_tasks.TryRemove(task.Options.Id, out removed))
             {
-                throw new InvalidOperationException($"Task {task.Id} with id {task} already added.");
+                removed.StopTriggers();
             }
-
-            if (!_started)
-            {
-                return this;
-            }
-
-            foreach (var trigger in task.Triggers)
-            {
-                StartTrigger(wrap, trigger);
-            }
-            return this;
-        }
-
-        public IScheduler Remove(ITask task)
-        {
-            if (task == null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
-            EnsureNotDisposed();
-            TaskWrap removed;
-            if (!_tasks.TryRemove(task.Id, out removed))
-            {
-                return this;
-            }
-            foreach (var trigger in removed.Task.Triggers)
-            {
-                trigger.Stop();
-            }
-            return this;
         }
 
         public void Start()
@@ -90,10 +76,7 @@ namespace Codestellation.Pulsar.Schedulers
 
             foreach (var task in _tasks.Values)
             {
-                foreach (var trigger in task.Task.Triggers)
-                {
-                    StartTrigger(task, trigger);
-                }
+                task.StartTriggers();
             }
         }
 
@@ -104,10 +87,7 @@ namespace Codestellation.Pulsar.Schedulers
 
             foreach (var task in _tasks)
             {
-                foreach (var trigger in task.Value.Task.Triggers)
-                {
-                    trigger.Stop();
-                }
+                task.Value.StopTriggers();
             }
         }
 

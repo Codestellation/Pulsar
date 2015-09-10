@@ -1,41 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace Codestellation.Pulsar.Tests
 {
-    public class TestTask : ITask
+    public class TestAction
     {
-        private readonly HashSet<ITrigger> _triggers;
         private readonly AutoResetEvent _ran;
         private readonly AutoResetEvent _finished;
         public int CalledTimes;
 
-        public TestTask()
+        public TestAction()
         {
-            Id = Guid.NewGuid();
-
-            _triggers = new HashSet<ITrigger>();
             Options = new TaskOptions
             {
-                Title = $"Test task {Id}"
+                TaskAction = Run
             };
-
             _ran = new AutoResetEvent(false);
             _finished = new AutoResetEvent(false);
         }
 
-        public Guid Id { get; set; }
-
         public TaskOptions Options { get; }
-
-        public IEnumerable<ITrigger> Triggers => _triggers;
-
-        public TestTask AddTrigger(ITrigger trigger)
-        {
-            _triggers.Add(trigger);
-            return this;
-        }
 
         public void Run()
         {

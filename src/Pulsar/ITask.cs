@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Codestellation.Pulsar
 {
@@ -8,11 +7,6 @@ namespace Codestellation.Pulsar
     /// </summary>
     public interface ITask
     {
-        /// <summary>
-        /// Unique identifier of task used by <see cref="IScheduler"/> to distinguish task.
-        /// </summary>
-        Guid Id { get; }
-
         /// <summary>
         /// Returns task options
         /// </summary>
@@ -23,9 +17,8 @@ namespace Codestellation.Pulsar
         /// </summary>
         IEnumerable<ITrigger> Triggers { get; }
 
-        /// <summary>
-        /// Called by <see cref="IScheduler"/> when one of the task triggers fire.
-        /// </summary>
-        void Run();
+        ITask AddTrigger(ITrigger trigger);
+
+        ITask RemoveTrigger(ITrigger trigger);
     }
 }

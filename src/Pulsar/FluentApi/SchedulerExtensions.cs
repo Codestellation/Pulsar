@@ -1,5 +1,4 @@
 ﻿using System;
-using Codestellation.Pulsar.Tasks;
 using Codestellation.Pulsar.Timers;
 using Codestellation.Pulsar.Triggers;
 
@@ -13,7 +12,7 @@ namespace Codestellation.Pulsar.FluentApi
         /// <summary>
         /// Creates new <see cref="ActionTask"/> and adds it to <see cref="IScheduler"/>
         /// </summary>
-        public static ActionTask StartTask(this IScheduler self, Action taskAction)
+        public static ITask StartTask(this IScheduler self, Action taskAction)
         {
             if (self == null)
             {
@@ -25,15 +24,18 @@ namespace Codestellation.Pulsar.FluentApi
                 throw new ArgumentNullException(nameof(taskAction));
             }
 
-            var task = new ActionTask(taskAction);
-            self.Add(task);
+            var options = new TaskOptions
+            {
+                TaskAction = taskAction
+            };
+            var task = self.Create(options);
             return task;
         }
 
         /// <summary>
-        /// Adds cron trigger to <see cref="AbstractTask"/>
+        /// Adds cron trigger to <see cref="ITask"/>
         /// </summary>
-        public static void UseCron(this AbstractTask self, string cronExpression, ITimer timer = null, TimeZoneInfo timeZone = null)
+        public static void UseCron(this ITask self, string cronExpression, ITimer timer = null, TimeZoneInfo timeZone = null)
         {
             if (self == null)
             {
@@ -48,9 +50,9 @@ namespace Codestellation.Pulsar.FluentApi
         }
 
         /// <summary>
-        /// Adds simple trigger to <see cref="AbstractTask"/>
+        /// Adds simple trigger to <see cref="ITask"/>
         /// </summary>
-        public static void UseParameters(this AbstractTask self, DateTime startAt, TimeSpan? interval, ITimer timer = null)
+        public static void UseParameters(this ITask self, DateTime startAt, TimeSpan? interval, ITimer timer = null)
         {
             if (self == null)
             {

@@ -15,11 +15,11 @@ namespace Codestellation.Pulsar
         /// <summary>
         /// Adds a <see cref="ITask"/>to scheduler. Task must have unique Id.
         /// </summary>
-        IScheduler Add(ITask task);
+        ITask Create(TaskOptions options);
 
         /// <summary>
         /// Removes specified task from scheduler
         /// </summary>
-        IScheduler Remove(ITask task);
+        void Delete(ITask task);
     }
 }

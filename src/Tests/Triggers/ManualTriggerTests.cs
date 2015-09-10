@@ -7,16 +7,14 @@ namespace Codestellation.Pulsar.Tests.Triggers
     [TestFixture]
     public class ManualTriggerTests
     {
-        private TestTask _task;
+        private TestAction _action;
         private ManualTrigger _trigger;
 
         [SetUp]
         public void SetUp()
         {
-            _task = new TestTask();
+            _action = new TestAction();
             _trigger = new ManualTrigger();
-
-            _task.AddTrigger(_trigger);
         }
 
         [Test]
@@ -27,18 +25,18 @@ namespace Codestellation.Pulsar.Tests.Triggers
             //when
             _trigger.Fire();
             //then
-            _task.WaitForRun().ShouldBe(false, "Task was called when trigger is not started");
+            _action.WaitForRun().ShouldBe(false, "Task was called when trigger is not started");
         }
 
         [Test]
         public void Should_fire_if_trigger_is_started()
         {
             //given
-            _trigger.Start(context => _task.Run());
+            _trigger.Start(context => _action.Run());
             //when
             _trigger.Fire();
             //then
-            _task.WaitForRun().ShouldBe(true, "Task was called when trigger is not started");
+            _action.WaitForRun().ShouldBe(true, "Task was called when trigger is not started");
         }
     }
 }

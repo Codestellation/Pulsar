@@ -11,20 +11,21 @@ namespace Codestellation.Pulsar.Tests.Scheulders
     public class PulsarSchedulerTests
     {
         private PulsarScheduler _scheduler;
-        private TestTask _task;
+        private TestAction _action;
         private ManualTrigger _trigger;
+        private ITask _task;
 
         [SetUp]
         public void SetUp()
         {
             _scheduler = new PulsarScheduler();
 
-            _task = new TestTask();
+            _action = new TestAction();
             _trigger = new ManualTrigger();
 
-            _task.AddTrigger(_trigger);
+            _task = _scheduler.Create(_action.Options);
 
-            _scheduler.Add(_task);
+            _task.AddTrigger(_trigger);
         }
 
         [Test]
@@ -35,13 +36,13 @@ namespace Codestellation.Pulsar.Tests.Scheulders
             //when
             _trigger.Fire();
             //then
-            Assert.That(_task.WaitForRun(), Is.True, "Task was not called in specifed scheduler");
+            Assert.That(_action.WaitForRun(), Is.True, "Task was not called in specifed scheduler");
         }
 
         [Test]
         public void Should_not_run_task_twice_if_concurrent_execution_is_forbidden()
         {
-            _task.Options.AllowConcurrentExecution = false;
+            _action.Options.AllowConcurrentExecution = false;
             _scheduler.Start();
 
             var task = Task.Run(() =>
@@ -52,15 +53,15 @@ namespace Codestellation.Pulsar.Tests.Scheulders
 
             task.Wait();
             Thread.Sleep(2000);
-            _task.Finish();
+            _action.Finish();
 
             if (task.IsFaulted)
             {
                 Console.WriteLine(task.Exception);
             }
 
-            Assert.That(_task.WaitForRun(), Is.True);
-            Assert.That(_task.CalledTimes, Is.EqualTo(1));
+            Assert.That(_action.WaitForRun(), Is.True);
+            Assert.That(_action.CalledTimes, Is.EqualTo(1));
         }
     }
 }

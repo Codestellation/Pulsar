@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <Folder Include="Tasks\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionVersion.cs">
@@ -64,10 +65,8 @@
     <Compile Include="ITrigger.cs" />
     <Compile Include="Misc\Clock.cs" />
     <Compile Include="Schedulers\PulsarScheduler.cs" />
-    <Compile Include="Schedulers\TaskWrap.cs" />
+    <Compile Include="Schedulers\SchedulerTask.cs" />
     <Compile Include="TaskOptions.cs" />
-    <Compile Include="Tasks\AbstractTask.cs" />
-    <Compile Include="Tasks\ActionTask.cs" />
     <Compile Include="Timers\AbstractTimer.cs" />
     <Compile Include="Timers\ITimer.cs" />
     <Compile Include="Timers\PreciseTimer.cs" />
