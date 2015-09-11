@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Codestellation.Pulsar.Schedulers
 {
+    /// <summary>
+    /// Manages tasks lifecycle
+    /// </summary>
     public class PulsarScheduler : IScheduler, IDisposable, ISchedulerController
     {
         private readonly ConcurrentDictionary<Guid, SchedulerTask> _tasks;
@@ -36,7 +39,7 @@ namespace Codestellation.Pulsar.Schedulers
         /// Initializes new task instance and adds it to scheduler collection
         /// </summary>
         /// <param name="options"></param>
-        /// <returns></returns>
+        /// <returns>Returns created task</returns>
         public ITask Create(TaskOptions options)
         {
             if (options == null)
@@ -69,6 +72,9 @@ namespace Codestellation.Pulsar.Schedulers
             }
         }
 
+        /// <summary>
+        /// Forces a <see cref="IScheduler"/> to start triggers from attached instances <see cref="ITask"/>
+        /// </summary>
         public void Start()
         {
             EnsureNotDisposed();
@@ -80,6 +86,9 @@ namespace Codestellation.Pulsar.Schedulers
             }
         }
 
+        /// <summary>
+        /// Stops all triggers and force <see cref="IScheduler"/> to prevent Task.Run calls
+        /// </summary>
         public void Stop()
         {
             EnsureNotDisposed();
@@ -91,6 +100,9 @@ namespace Codestellation.Pulsar.Schedulers
             }
         }
 
+        /// <summary>
+        /// Stops all task and triggres
+        /// </summary>
         public void Dispose()
         {
             if (_disposed)

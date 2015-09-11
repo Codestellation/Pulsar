@@ -72,6 +72,9 @@ namespace Codestellation.Pulsar.Schedulers
             return this;
         }
 
+        /// <summary>
+        /// Starts all triggers attached to task
+        /// </summary>
         public void StartTriggers()
         {
             foreach (var trigger in Triggers)
@@ -80,6 +83,9 @@ namespace Codestellation.Pulsar.Schedulers
             }
         }
 
+        /// <summary>
+        /// Stops all triggers attached to task
+        /// </summary>
         public void StopTriggers()
         {
             foreach (var trigger in Triggers)
