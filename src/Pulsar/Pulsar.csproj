@@ -37,7 +37,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="Tasks\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionVersion.cs">
@@ -57,7 +56,6 @@
     <Compile Include="Cron\DayOfMonthField.cs" />
     <Compile Include="Cron\DayOfWeekField.cs" />
     <Compile Include="Cron\IntegerIndex.cs" />
-    <Compile Include="Cron\SetExtensions.cs" />
     <Compile Include="Cron\SimpleCronField.cs" />
     <Compile Include="IScheduler.cs" />
     <Compile Include="ISchedulerController.cs" />

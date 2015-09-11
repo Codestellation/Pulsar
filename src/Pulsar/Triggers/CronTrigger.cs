@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Codestellation.Pulsar.Cron;
 using Codestellation.Pulsar.Misc;
 using Codestellation.Pulsar.Timers;
@@ -8,6 +9,7 @@ namespace Codestellation.Pulsar.Triggers
     /// <summary>
     /// Fires on schedule specified in cron expression
     /// </summary>
+    [DebuggerDisplay("{_cronExpression} Next = {NextFireAt}")]
     public class CronTrigger : TimerTrigger
     {
         private readonly CronExpression _cronExpression;

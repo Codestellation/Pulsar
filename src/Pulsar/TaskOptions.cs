@@ -46,5 +46,10 @@ namespace Codestellation.Pulsar
         /// Called by <see cref="IScheduler"/> when one of the task triggers fire.
         /// </summary>
         public Action TaskAction { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Id.ToString()} - '{Title}'";
+        }
     }
 }

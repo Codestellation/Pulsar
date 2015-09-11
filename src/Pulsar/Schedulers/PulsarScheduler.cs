@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Codestellation.Pulsar.Schedulers
 {
     /// <summary>
     /// Manages tasks lifecycle
     /// </summary>
+    [DebuggerDisplay("Count = {_tasks.Count}")]
     public class PulsarScheduler : IScheduler, IDisposable, ISchedulerController
     {
         private readonly ConcurrentDictionary<Guid, SchedulerTask> _tasks;

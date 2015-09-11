@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using Codestellation.Pulsar.Triggers;
 
@@ -8,6 +9,7 @@ namespace Codestellation.Pulsar.Schedulers
     /// <summary>
     /// Encapsulates scheduler task logic
     /// </summary>
+    [DebuggerDisplay("{Options}; Triggers = {_triggers.Count}")]
     public class SchedulerTask : ITask
     {
         private readonly Func<bool> _schedulerStarted;

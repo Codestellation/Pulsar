@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Codestellation.Pulsar.Misc;
 
@@ -8,13 +9,14 @@ namespace Codestellation.Pulsar.Timers
     /// Similar to <see cref="SimpleTimer"/> but has reduced drift effect.
     /// <remarks>http://stackoverflow.com/questions/8431995/c-sharp-net-2-threading-timer-time-drifting</remarks>
     /// </summary>
+    [DebuggerDisplay("Next = {_nextStartAt}")]
     public class PreciseTimer : AbstractTimer
     {
         private static readonly TimeSpan MaxTimerInterval = TimeSpan.FromMinutes(1);
 
         private DateTime _firstStartAt;
         private TimeSpan? _interval;
-        private DateTime _nextStartat;
+        private DateTime _nextStartAt;
 
         /// <summary>
         /// Sets next timer to fire from for internal timer
@@ -24,7 +26,7 @@ namespace Codestellation.Pulsar.Timers
         protected override void SetupInternal(DateTime startAt, TimeSpan? interval)
         {
             _firstStartAt = startAt;
-            _nextStartat = _firstStartAt;
+            _nextStartAt = _firstStartAt;
             _interval = interval;
 
             TimeSpan fireAfter = CalculateFireAfter();
@@ -44,7 +46,7 @@ namespace Codestellation.Pulsar.Timers
                 Task.Run((Action)RaiseOnFired);
                 if (_interval.HasValue)
                 {
-                    _nextStartat += _interval.Value;
+                    _nextStartAt += _interval.Value;
                     OnInternalTimerFired();
                 }
                 return;
@@ -55,7 +57,7 @@ namespace Codestellation.Pulsar.Timers
 
         private TimeSpan CalculateFireAfter()
         {
-            var fireAfter = _nextStartat - Clock.UtcNow;
+            var fireAfter = _nextStartAt - Clock.UtcNow;
 
             if (fireAfter > MaxTimerInterval)
             {

@@ -8,6 +8,7 @@ namespace Codestellation.Pulsar.Cron
     /// </summary>
     public class CronExpression
     {
+        private readonly string _value;
         private readonly SimpleCronField _year;
         private readonly CronCalendarBuilder _builder;
         private readonly CronDaySchedule _daySchedule;
@@ -21,6 +22,7 @@ namespace Codestellation.Pulsar.Cron
         /// <param name="value">Actual expression value</param>
         public CronExpression(string value)
         {
+            _value = value;
             if (string.IsNullOrWhiteSpace(value))
             {
                 throw new ArgumentException("Must be neither null nor empty string", nameof(value));
@@ -64,10 +66,11 @@ namespace Codestellation.Pulsar.Cron
         }
 
         /// <summary>
-        /// Returns nearest occurence of fafadfa
+        /// Returns nearest occurrence aftre supplied datetime point
         /// </summary>
         /// <param name="point"></param>
-        /// <returns></returns>
+        /// <returns>Returns datetime if any occurrence found after suppled point. Returns null otherwise.</returns>
+        /// <remarks><see cref="DateTimeKind"/> of returned date is same as in point parameter</remarks>
         public DateTime? NearestAfter(DateTime point)
         {
             var kind = point.Kind;
@@ -119,6 +122,14 @@ namespace Codestellation.Pulsar.Cron
                 _calendars[year] = calendar;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Returns underlying cron expression
+        /// </summary>
+        public override string ToString()
+        {
+            return _value;
         }
     }
 }
