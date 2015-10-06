@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Codestellation.Pulsar.Diagnostics;
 
 namespace Codestellation.Pulsar.Schedulers
 {
@@ -11,6 +12,8 @@ namespace Codestellation.Pulsar.Schedulers
     [DebuggerDisplay("Count = {_tasks.Count}")]
     public class PulsarScheduler : IScheduler, IDisposable, ISchedulerController
     {
+        private static readonly string LoggerName = typeof(PulsarScheduler).FullName;
+
         private readonly ConcurrentDictionary<Guid, SchedulerTask> _tasks;
         private volatile bool _started;
         private volatile bool _disposed;
@@ -52,7 +55,15 @@ namespace Codestellation.Pulsar.Schedulers
 
             var task = new SchedulerTask(options, () => _started);
 
-            _tasks.TryAdd(task.Options.Id, task);
+            if (!_tasks.TryAdd(task.Options.Id, task))
+            {
+                throw new InvalidOperationException($"Task {task.Options.Id} already added");
+            }
+
+            if (PulsarLogger.IsDebugEnabled(LoggerName))
+            {
+                PulsarLogger.Debug(LoggerName, $"Created task {task.Options.Id} '{task.Options.Title}'");
+            }
 
             return task;
         }
@@ -72,6 +83,11 @@ namespace Codestellation.Pulsar.Schedulers
             {
                 removed.StopTriggers();
             }
+
+            if (PulsarLogger.IsDebugEnabled(LoggerName))
+            {
+                PulsarLogger.Debug(LoggerName, $"Removed task {task.Options.Id} '{task.Options.Title}'");
+            }
         }
 
         /// <summary>
@@ -82,19 +98,31 @@ namespace Codestellation.Pulsar.Schedulers
             EnsureNotDisposed();
             _started = true;
 
+            PulsarLogger.Debug(nameof(PulsarScheduler), "Starting");
+
             foreach (var task in _tasks.Values)
             {
                 task.StartTriggers();
             }
+
+            PulsarLogger.Debug(nameof(PulsarScheduler), "Started");
         }
 
         /// <summary>
-        /// Stops all triggers and force <see cref="IScheduler"/> to prevent Task.Run calls
+        /// Stops all triggers and force <see cref="IScheduler"/> to prevent <see cref="TaskOptions.TaskAction"/> invocation
         /// </summary>
         public void Stop()
         {
-            EnsureNotDisposed();
+            if (_disposed)
+            {
+                return;
+            }
+
+            PulsarLogger.Debug(nameof(PulsarScheduler), "Stopping");
+
             StopInternal();
+
+            PulsarLogger.Debug(nameof(PulsarScheduler), "Stopped");
         }
 
         private void StopInternal()
@@ -116,8 +144,13 @@ namespace Codestellation.Pulsar.Schedulers
             {
                 return;
             }
+
+            PulsarLogger.Debug(nameof(PulsarScheduler), "Disposing");
+
             _disposed = true;
             StopInternal();
+
+            PulsarLogger.Debug(nameof(PulsarScheduler), "Disposed");
         }
 
         private void EnsureNotDisposed()
