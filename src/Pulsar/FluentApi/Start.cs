@@ -7,7 +7,7 @@ namespace Codestellation.Pulsar.FluentApi
     /// <summary>
     /// Contains few extension methods and properties to support fluent api
     /// </summary>
-    public class Start
+    public static class Start
     {
         /// <summary>
         /// Use to start <see cref="SimpleTimerTrigger"/> immediately
@@ -47,5 +47,21 @@ namespace Codestellation.Pulsar.FluentApi
 
             return result;
         }
+
+        /// <summary>
+        /// Generates point in time with specified timespan from now
+        /// </summary>
+        /// <param name="timeSpan">Time to start timer after</param>
+        public static DateTime After(TimeSpan timeSpan)
+        {
+            if (timeSpan <= TimeSpan.Zero)
+            {
+                throw new ArgumentOutOfRangeException(nameof(timeSpan), "Should be greater than TimeSpan.Zero");
+            }
+
+            return Clock.UtcNow + timeSpan;
+        }
+
+
     }
 }

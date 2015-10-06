@@ -50,6 +50,7 @@
     <Compile Include="Cron\DayOfWeekFieldTests.cs" />
     <Compile Include="Cron\TimeFieldTests.cs" />
     <Compile Include="FluentApi\SchedulerExtensionsTests.cs" />
+    <Compile Include="FluentApi\StartTests.cs" />
     <Compile Include="ScratchPad.cs" />
     <Compile Include="TestAction.cs" />
     <Compile Include="Timers\TimerTests.cs" />
