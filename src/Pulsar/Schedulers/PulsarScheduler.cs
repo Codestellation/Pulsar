@@ -94,6 +94,11 @@ namespace Codestellation.Pulsar.Schedulers
         public void Stop()
         {
             EnsureNotDisposed();
+            StopInternal();
+        }
+
+        private void StopInternal()
+        {
             _started = false;
 
             foreach (var task in _tasks)
@@ -112,7 +117,7 @@ namespace Codestellation.Pulsar.Schedulers
                 return;
             }
             _disposed = true;
-            Stop();
+            StopInternal();
         }
 
         private void EnsureNotDisposed()

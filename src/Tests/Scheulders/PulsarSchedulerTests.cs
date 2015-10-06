@@ -29,6 +29,12 @@ namespace Codestellation.Pulsar.Tests.Scheulders
         }
 
         [Test]
+        public void Should_not_fail_on_dispose()
+        {
+            _scheduler.Dispose();
+        }
+
+        [Test]
         public void Should_call_task_if_scheduler_is_started()
         {
             //given
