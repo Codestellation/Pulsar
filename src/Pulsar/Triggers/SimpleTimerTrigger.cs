@@ -3,24 +3,44 @@ using Codestellation.Pulsar.Timers;
 
 namespace Codestellation.Pulsar.Triggers
 {
+    /// <summary>
+    ///  Abstracts work with timer using simple parameters
+    /// </summary>
     public class SimpleTimerTrigger : TimerTrigger
     {
-        private readonly DateTime _startAt;
-        private readonly TimeSpan? _interval;
+        /// <summary>
+        /// Gets a point in time to fire trigger first time
+        /// </summary>
+        public DateTime StartAt { get; }
 
-        public SimpleTimerTrigger(DateTime startAt, TimeSpan? interval,  ITimer timer) : base(timer)
+        /// <summary>
+        /// Gets a period of time to fire timer continuously
+        /// </summary>
+        public TimeSpan? Interval { get; }
+
+        /// <summary>
+        /// Initiaitlize new instance of <see cref="SimpleTimerTrigger"/>
+        /// </summary>
+        /// <param name="startAt">A point in time to fire trigger first time</param>
+        /// <param name="interval">A period of time to fire timer continuously</param>
+        /// <param name="timer">An instance of <see cref="ITimer"/> </param>
+        public SimpleTimerTrigger(DateTime startAt, TimeSpan? interval, ITimer timer)
+            : base(timer)
         {
             if (interval <= TimeSpan.Zero)
             {
-                throw new ArgumentOutOfRangeException("interval", "Must be greater than zero");
+                throw new ArgumentOutOfRangeException(nameof(interval), "Must be greater than zero");
             }
-            _startAt = startAt;
-            _interval = interval;
+            StartAt = startAt;
+            Interval = interval;
         }
 
+        /// <summary>
+        /// Called from <see cref="AbstractTrigger.Start"/> when parameter validation succeed
+        /// </summary>
         protected override void OnStart()
         {
-            SetupTimer(_startAt, _interval);
+            SetupTimer(StartAt, Interval);
         }
     }
 }

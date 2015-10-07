@@ -8,10 +8,15 @@ namespace Codestellation.Pulsar.Tests.FluentApi
     [TestFixture]
     public class StartTests
     {
+        [SetUp]
+        public void FreezeClock()
+        {
+            Clock.UtcNowFunction = () => new DateTime(2012, 10, 30, 12, 32, 01, DateTimeKind.Utc);
+        }
+
         [Test]
         public void Should_return_correct_time_in_start_after()
         {
-            Clock.UtcNowFunction = () => new DateTime(2012, 10, 30, 12, 32, 01, DateTimeKind.Utc);
             TimeSpan minute = TimeSpan.FromMinutes(1);
             var startAt = Start.After(minute);
 
