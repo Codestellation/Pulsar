@@ -1,4 +1,5 @@
 ﻿using System;
+using Codestellation.Pulsar.Cron;
 using Codestellation.Pulsar.Timers;
 using Codestellation.Pulsar.Triggers;
 
@@ -44,7 +45,8 @@ namespace Codestellation.Pulsar.FluentApi
 
             timer = timer ?? new PreciseTimer();
             timeZone = timeZone ?? TimeZoneInfo.Local;
-            var trigger = new CronTrigger(cronExpression, timeZone, timer);
+            var schedule = new CronSchedule(new CronExpression(cronExpression), timeZone);
+            var trigger = new ScheduleTrigger(schedule, timer);
 
             self.AddTrigger(trigger);
 

@@ -44,7 +44,7 @@ namespace Codestellation.Pulsar.Tests.FluentApi
 
             var task = _scheduler.Tasks.Single();
             var trigger = task.Triggers.Single();
-            Assert.That(trigger, Is.InstanceOf<CronTrigger>());
+            Assert.That(trigger, Is.InstanceOf<ScheduleTrigger>());
         }
 
         [Test]

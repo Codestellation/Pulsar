@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Codestellation.Pulsar.Tests.Triggers
 {
     [TestFixture]
-    public class CronTriggerTests
+    public class ScheduleTriggerTests
     {
         [Test]
         public void Should_run_in_specified_time_zone()
@@ -24,7 +24,8 @@ namespace Codestellation.Pulsar.Tests.Triggers
                 Month = "*",
                 DayOfWeek = "?"
             };
-            var trigger = new CronTrigger(builder.ToCronExpression(), timeZone, new StubTimer());
+            var schedule = new CronSchedule(builder.ToCronExpression(), timeZone);
+            var trigger = new ScheduleTrigger(schedule, new StubTimer());
 
             Clock.UtcNowFunction = () => new DateTime(2016, 4, 3, 3, 5, 43, DateTimeKind.Utc);
 

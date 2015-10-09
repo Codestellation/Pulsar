@@ -71,10 +71,12 @@
     <Compile Include="Timers\SimpleTimer.cs" />
     <Compile Include="Timers\StubTimer.cs" />
     <Compile Include="Cron\CronExpressionBuilder.cs" />
+    <Compile Include="Triggers\CronSchedule.cs" />
+    <Compile Include="Triggers\ISchedule.cs" />
     <Compile Include="Triggers\TriggerCallback.cs" />
     <Compile Include="Triggers\TriggerContext.cs" />
     <Compile Include="Triggers\AbstractTrigger.cs" />
-    <Compile Include="Triggers\CronTrigger.cs" />
+    <Compile Include="Triggers\ScheduleTrigger.cs" />
     <Compile Include="Triggers\ManualTrigger.cs" />
     <Compile Include="Triggers\SimpleTimerTrigger.cs" />
     <Compile Include="Triggers\TimerTrigger.cs" />
