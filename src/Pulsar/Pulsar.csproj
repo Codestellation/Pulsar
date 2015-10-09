@@ -80,6 +80,7 @@
     <Compile Include="Triggers\ManualTrigger.cs" />
     <Compile Include="Triggers\SimpleTimerTrigger.cs" />
     <Compile Include="Triggers\TimerTrigger.cs" />
+    <Compile Include="Triggers\WeeklySchedule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
