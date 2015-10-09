@@ -57,7 +57,7 @@
     <Compile Include="Timers\TimerTests.cs" />
     <Compile Include="Triggers\ScheduleTriggerTests.cs" />
     <Compile Include="Triggers\ManualTriggerTests.cs" />
-    <Compile Include="Scheulders\PulsarSchedulerTests.cs" />
+    <Compile Include="Schedulers\PulsarSchedulerTests.cs" />
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
