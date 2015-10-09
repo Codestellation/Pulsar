@@ -30,7 +30,7 @@ namespace Codestellation.Pulsar.Triggers
             _days = new SortedSet<DayOfWeek>(days);
             _times = new SortedSet<TimeSpan>(times);
 
-            foreach (var time in times)
+            foreach (var time in _times)
             {
                 if (TimeSpan.FromDays(1) <= time)
                 {
@@ -67,7 +67,6 @@ namespace Codestellation.Pulsar.Triggers
                         return nextDay.Add(_times.Min);
                     }
                 }
-
                 return null;
             }
         }
@@ -76,8 +75,7 @@ namespace Codestellation.Pulsar.Triggers
         {
             var times = string.Join(",", _times);
             var days = string.Join(",", _days);
-
-            return $"{times} {days} {_timeZone.Id}";
+            return $"{times} {days} {_timeZone.StandardName}";
         }
     }
 }
