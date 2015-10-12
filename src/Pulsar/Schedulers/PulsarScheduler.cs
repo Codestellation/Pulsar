@@ -12,7 +12,7 @@ namespace Codestellation.Pulsar.Schedulers
     [DebuggerDisplay("Count = {_tasks.Count}")]
     public class PulsarScheduler : IScheduler, IDisposable, ISchedulerController
     {
-        private static readonly string LoggerName = typeof(PulsarScheduler).FullName;
+        private static readonly PulsarLogger Logger = PulsarLogManager.GetLogger<PulsarScheduler>();
 
         private readonly ConcurrentDictionary<Guid, SchedulerTask> _tasks;
         private volatile bool _started;
@@ -60,9 +60,9 @@ namespace Codestellation.Pulsar.Schedulers
                 throw new InvalidOperationException($"Task {task.Options.Id} already added");
             }
 
-            if (PulsarLogger.IsDebugEnabled(LoggerName))
+            if (Logger.IsInfoEnabled)
             {
-                PulsarLogger.Debug(LoggerName, $"Created task {task.Options.Id} '{task.Options.Title}'");
+                Logger.Info($"Created task {task.Options.Id} '{task.Options.Title}'");
             }
 
             return task;
@@ -84,9 +84,9 @@ namespace Codestellation.Pulsar.Schedulers
                 removed.StopTriggers();
             }
 
-            if (PulsarLogger.IsDebugEnabled(LoggerName))
+            if (Logger.IsInfoEnabled)
             {
-                PulsarLogger.Debug(LoggerName, $"Removed task {task.Options.Id} '{task.Options.Title}'");
+                Logger.Info($"Removed task {task.Options.Id} '{task.Options.Title}'");
             }
         }
 
@@ -98,14 +98,14 @@ namespace Codestellation.Pulsar.Schedulers
             EnsureNotDisposed();
             _started = true;
 
-            PulsarLogger.Debug(nameof(PulsarScheduler), "Starting");
+            Logger.Info("Starting");
 
             foreach (var task in _tasks.Values)
             {
                 task.StartTriggers();
             }
 
-            PulsarLogger.Debug(nameof(PulsarScheduler), "Started");
+            Logger.Info("Started");
         }
 
         /// <summary>
@@ -118,11 +118,11 @@ namespace Codestellation.Pulsar.Schedulers
                 return;
             }
 
-            PulsarLogger.Debug(nameof(PulsarScheduler), "Stopping");
+            Logger.Info("Stopping");
 
             StopInternal();
 
-            PulsarLogger.Debug(nameof(PulsarScheduler), "Stopped");
+            Logger.Info("Stopped");
         }
 
         private void StopInternal()
@@ -145,12 +145,12 @@ namespace Codestellation.Pulsar.Schedulers
                 return;
             }
 
-            PulsarLogger.Debug(nameof(PulsarScheduler), "Disposing");
+            Logger.Info("Disposing");
 
             _disposed = true;
             StopInternal();
 
-            PulsarLogger.Debug(nameof(PulsarScheduler), "Disposed");
+            Logger.Info("Disposed");
         }
 
         private void EnsureNotDisposed()

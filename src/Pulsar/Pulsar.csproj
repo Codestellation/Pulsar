@@ -44,6 +44,7 @@
     </Compile>
     <Compile Include="Diagnostics\LogSettings.cs" />
     <Compile Include="Diagnostics\PulsarLogger.cs" />
+    <Compile Include="Diagnostics\PulsarLogManager.cs" />
     <Compile Include="FluentApi\Repeat.cs" />
     <Compile Include="FluentApi\SchedulerExtensions.cs" />
     <Compile Include="FluentApi\Start.cs" />
