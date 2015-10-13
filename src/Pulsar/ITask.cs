@@ -17,8 +17,14 @@ namespace Codestellation.Pulsar
         /// </summary>
         IEnumerable<ITrigger> Triggers { get; }
 
+        /// <summary>
+        /// Adds specified trigger from task
+        /// </summary>
         ITask AddTrigger(ITrigger trigger);
 
+        /// <summary>
+        /// Removes specified trigger from task
+        /// </summary>
         ITask RemoveTrigger(ITrigger trigger);
     }
 }

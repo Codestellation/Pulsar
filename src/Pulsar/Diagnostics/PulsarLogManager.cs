@@ -12,7 +12,7 @@ namespace Codestellation.Pulsar.Diagnostics
     {
         /// <summary>
         /// Returns true if it possible to log console. Returns false otherwise.
-        /// <remarks>It's not releated to <see cref="LogSettings.LogToConsole"/> property, but depends on <see cref="System.Console"/> class availability</remarks>
+        /// <remarks>It's not releated to <see cref="LogSettings.LogToConsole"/> property, but depends on System.Console class availability</remarks>
         /// </summary>
         public static readonly bool CanLogToConsole;
 

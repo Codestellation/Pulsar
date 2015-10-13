@@ -47,6 +47,9 @@ namespace Codestellation.Pulsar
         /// </summary>
         public Action TaskAction { get; set; }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
         public override string ToString()
         {
             return $"{Id.ToString()} - '{Title}'";

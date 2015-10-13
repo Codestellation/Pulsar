@@ -11,7 +11,7 @@ namespace Codestellation.Pulsar.FluentApi
     public static class SchedulerExtensions
     {
         /// <summary>
-        /// Creates new <see cref="ActionTask"/> and adds it to <see cref="IScheduler"/>
+        /// Creates new intannse of <see cref="ITask"/> and adds it to <see cref="IScheduler"/> with specified <see cref="Action"/>
         /// </summary>
         public static ITask StartTask(this IScheduler self, Action taskAction)
         {
