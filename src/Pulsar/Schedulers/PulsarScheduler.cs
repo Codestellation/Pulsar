@@ -29,16 +29,7 @@ namespace Codestellation.Pulsar.Schedulers
         /// <summary>
         /// Enumerates all tasks attacked to scheduler
         /// </summary>
-        public IEnumerable<ITask> Tasks
-        {
-            get
-            {
-                foreach (var task in _tasks)
-                {
-                    yield return task.Value;
-                }
-            }
-        }
+        public IEnumerable<ITask> Tasks => _tasks.Values;
 
         /// <summary>
         /// Initializes new task instance and adds it to scheduler collection

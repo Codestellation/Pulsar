@@ -12,7 +12,7 @@ namespace Codestellation.Pulsar.FluentApi
         /// <summary>
         /// Use to start <see cref="SimpleTimerTrigger"/> immediately
         /// </summary>
-        public static DateTime Immediately = DateTime.MinValue.ToUniversalTime();
+        public static readonly DateTime Immediately = DateTime.MinValue.ToUniversalTime();
 
         /// <summary>
         /// Generates expresson
@@ -61,7 +61,5 @@ namespace Codestellation.Pulsar.FluentApi
 
             return Clock.UtcNow + timeSpan;
         }
-
-
     }
 }

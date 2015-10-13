@@ -15,39 +15,18 @@ namespace Codestellation.Pulsar.Cron
             DatePartSelector = datePartSelector;
         }
 
-        public static CronFieldSettings DayOfMonth
-        {
-            get { return new CronFieldSettings(1, 31, x => x.Day); }
-        }
+        public static CronFieldSettings DayOfMonth => new CronFieldSettings(1, 31, x => x.Day);
 
-        public static CronFieldSettings Second
-        {
-            get { return new CronFieldSettings(0, 59, x => x.Second); }
-        }
+        public static CronFieldSettings Second => new CronFieldSettings(0, 59, x => x.Second);
 
-        public static CronFieldSettings Minute
-        {
-            get { return new CronFieldSettings(0, 59, x => x.Minute); }
-        }
+        public static CronFieldSettings Minute => new CronFieldSettings(0, 59, x => x.Minute);
 
-        public static CronFieldSettings Hour
-        {
-            get { return new CronFieldSettings(0, 23, x => x.Hour); }
-        }
+        public static CronFieldSettings Hour => new CronFieldSettings(0, 23, x => x.Hour);
 
-        public static CronFieldSettings Month
-        {
-            get { return new CronFieldSettings(1, 12, x => x.Month); }
-        }
+        public static CronFieldSettings Month => new CronFieldSettings(1, 12, x => x.Month);
 
-        public static CronFieldSettings Year
-        {
-            get { return new CronFieldSettings(2000, 2100, x => x.Year); }
-        }
+        public static CronFieldSettings Year => new CronFieldSettings(2000, 2100, x => x.Year);
 
-        public static CronFieldSettings DayOfWeed
-        {
-            get { return new CronFieldSettings(1, 7, x => CronDateHelper.ToCronValue(x.DayOfWeek)); }
-        }
+        public static CronFieldSettings DayOfWeed => new CronFieldSettings(1, 7, x => CronDateHelper.ToCronValue(x.DayOfWeek));
     }
 }

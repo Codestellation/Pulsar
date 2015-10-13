@@ -19,7 +19,7 @@ namespace Codestellation.Pulsar.Cron
             _values = new List<int>();
             _selectors = new List<Func<DateTime, bool>>();
 
-            var subTokens = CronParser.Tokenize(token,CronSymbols.Comma);
+            var subTokens = CronParser.Tokenize(token, CronSymbols.Comma);
 
             foreach (var subToken in subTokens)
             {
@@ -37,20 +37,11 @@ namespace Codestellation.Pulsar.Cron
             _values.Sort();
         }
 
-        public IEnumerable<int> Values
-        {
-            get { return _values; }
-        }
+        public IEnumerable<int> Values => _values;
 
-        public int MinValue
-        {
-            get { return _values[0]; }
-        }
+        public int MinValue => _values[0];
 
-        public int MaxValue
-        {
-            get { return _values[_values.Count - 1]; }
-        }
+        public int MaxValue => _values[_values.Count - 1];
 
         private bool ContainsValue(DateTime date)
         {
@@ -84,7 +75,6 @@ namespace Codestellation.Pulsar.Cron
             var message = string.Format("Could not parse value '{0}'", token);
             throw new FormatException(message);
         }
-
 
         protected void AddSelector(Func<DateTime, bool> selector)
         {

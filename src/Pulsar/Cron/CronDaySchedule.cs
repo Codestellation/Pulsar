@@ -42,10 +42,7 @@ namespace Codestellation.Pulsar.Cron
             }
         }
 
-        public TimeSpan MinTime
-        {
-            get { return _timeSpan; }
-        }
+        public TimeSpan MinTime => _timeSpan;
 
         public bool TryGetTimeAfter(TimeSpan timeOfDay, out TimeSpan fireAt)
         {

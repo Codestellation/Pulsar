@@ -16,10 +16,7 @@ namespace Codestellation.Pulsar.Cron
             _dayIndex = new HashSet<DateTime>(_days);
         }
 
-        public IEnumerable<DateTime> ScheduledDays
-        {
-            get { return _days; }
-        }
+        public IEnumerable<DateTime> ScheduledDays => _days;
 
         public IEnumerable<DateTime> DaysAfter(DateTime point)
         {
