@@ -16,27 +16,47 @@ namespace Codestellation.Pulsar.Diagnostics
         /// </summary>
         public static readonly bool CanLogToConsole;
 
+        /// <summary>
+        /// Gets or sets logger factory delegate. 
+        /// <remarks></remarks>
+        /// </summary>
+        public static Func<string, PulsarLogger> LoggerFactory
+        {
+            get { return _loggerFactory; }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+                _loggerFactory = value;
+            }
+        }
+
         private static readonly Action<string> ConsoleWriteLineDelegate;
+        private static Func<string, PulsarLogger> _loggerFactory;
 
         static PulsarLogManager()
         {
+            LoggerFactory = fullname => new PulsarLogger(fullname);
+            ConsoleWriteLineDelegate = GenerateLogToConsoleDelegate();
+            CanLogToConsole = ConsoleWriteLineDelegate != null;
+        }
+
+        private static Action<string> GenerateLogToConsoleDelegate()
+        {
             var consoleType = Type.GetType("System.Console, mscorlib");
-            if (consoleType == null)
-            {
-                CanLogToConsole = false;
-                return;
-            }
-            CanLogToConsole = true;
-            var writeLineMethod = consoleType.GetRuntimeMethod("WriteLine", new[] { typeof(string) });
+
+            var writeLineMethod = consoleType?.GetRuntimeMethod("WriteLine", new[] { typeof(string) });
             if (writeLineMethod == null)
             {
-                throw new InvalidOperationException("Could not find WriteLine method");
+                return null;
             }
 
             var stringParameter = Expression.Parameter(typeof(string));
             var writeLineCall = Expression.Call(writeLineMethod, stringParameter);
 
-            ConsoleWriteLineDelegate = Expression.Lambda<Action<string>>(writeLineCall, stringParameter).Compile();
+            return Expression.Lambda<Action<string>>(writeLineCall, stringParameter).Compile();
         }
 
         /// <summary>
@@ -45,7 +65,7 @@ namespace Codestellation.Pulsar.Diagnostics
         /// <typeparam name="T">A type to create logger for</typeparam>
         public static PulsarLogger GetLogger<T>()
         {
-            return new PulsarLogger(typeof(T).FullName);
+            return LoggerFactory(typeof(T).FullName);
         }
 
         internal static void ConsoleWriteLine(PulsarLogger pulsarLogger, string level, string message)

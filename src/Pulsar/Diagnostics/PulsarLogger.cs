@@ -20,17 +20,17 @@ namespace Codestellation.Pulsar.Diagnostics
         /// <summary>
         /// Gets it a debug message should be written
         /// </summary>
-        public bool IsDebugEnabled { get; private set; }
+        public virtual bool IsDebugEnabled { get; private set; }
 
         /// <summary>
         /// Gets it a informational message should be written
         /// </summary>
-        public bool IsInfoEnabled { get; private set; }
+        public virtual bool IsInfoEnabled { get; private set; }
 
         /// <summary>
         /// Gets it a warning message should be written
         /// </summary>
-        public bool IsWarnEnabled { get; private set; }
+        public virtual bool IsWarnEnabled { get; private set; }
 
         /// <summary>
         /// Initialize new instance of <see cref="PulsarLogger"/>
@@ -56,6 +56,18 @@ namespace Codestellation.Pulsar.Diagnostics
         public void Debug(string message)
         {
             PulsarLogManager.ConsoleWriteLine(this, "DEBUG", message);
+
+            if (IsDebugEnabled)
+            {
+                OnDebug(message);
+            }
+        }
+
+        /// <summary>
+        /// Called when <see cref="IsDebugEnabled"/> is true and method <see cref="Debug"/> was called
+        /// </summary>
+        protected virtual void OnDebug(string message)
+        {
         }
 
         /// <summary>
@@ -64,6 +76,18 @@ namespace Codestellation.Pulsar.Diagnostics
         public void Info(string message)
         {
             PulsarLogManager.ConsoleWriteLine(this, "INFO", message);
+
+            if (IsInfoEnabled)
+            {
+                OnInfo(message);
+            }
+        }
+
+        /// <summary>
+        /// Called when <see cref="IsInfoEnabled"/> is true and method <see cref="Info"/> was called
+        /// </summary>
+        protected virtual void OnInfo(string message)
+        {
         }
 
         /// <summary>
@@ -72,6 +96,18 @@ namespace Codestellation.Pulsar.Diagnostics
         public void Warn(string message)
         {
             PulsarLogManager.ConsoleWriteLine(this, "WARN", message);
+
+            if (IsWarnEnabled)
+            {
+                OnWarn(message);
+            }
+        }
+
+        /// <summary>
+        /// Called when <see cref="IsInfoEnabled"/> is true and method <see cref="Info"/> was called
+        /// </summary>
+        protected virtual void OnWarn(string message)
+        {
         }
     }
 }
