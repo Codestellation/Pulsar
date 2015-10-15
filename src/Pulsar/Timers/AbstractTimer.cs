@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using Codestellation.Pulsar.Diagnostics;
 
 namespace Codestellation.Pulsar.Timers
 {
@@ -8,6 +9,8 @@ namespace Codestellation.Pulsar.Timers
     /// </summary>
     public abstract class AbstractTimer : ITimer, IDisposable
     {
+        private static readonly PulsarLogger Logger = PulsarLogManager.GetLogger<AbstractTimer>();
+
         private readonly Timer _internalTimer;
         private bool _disposed;
 
@@ -44,6 +47,11 @@ namespace Codestellation.Pulsar.Timers
 
             var startAtUtc = startAt.Kind == DateTimeKind.Local ? startAt.ToUniversalTime() : startAt;
 
+            if (Logger.IsInfoEnabled)
+            {
+                Logger.Info($"Set up timer at {startAt} with {interval.ToString() ?? "no"} interval");
+            }
+
             SetupInternal(startAtUtc, interval);
         }
 
@@ -55,6 +63,11 @@ namespace Codestellation.Pulsar.Timers
             if (!_disposed)
             {
                 _internalTimer.Change(Timeout.Infinite, Timeout.Infinite);
+
+                if (Logger.IsDebugEnabled)
+                {
+                    Logger.Debug($"Stopped");
+                }
             }
         }
 
@@ -71,6 +84,11 @@ namespace Codestellation.Pulsar.Timers
             if (!_disposed)
             {
                 _internalTimer.Change(fireAfter, interval);
+
+                if (Logger.IsDebugEnabled)
+                {
+                    Logger.Debug($"Set up internal: fireAfter =  {fireAfter},  interval = {interval}");
+                }
             }
         }
 
@@ -86,6 +104,11 @@ namespace Codestellation.Pulsar.Timers
         {
             if (!_disposed)
             {
+                if (Logger.IsDebugEnabled)
+                {
+                    Logger.Debug("Fired");
+                }
+
                 Volatile.Read(ref OnFired)?.Invoke();
             }
         }
@@ -99,6 +122,11 @@ namespace Codestellation.Pulsar.Timers
             {
                 _disposed = true;
                 _internalTimer.Dispose();
+
+                if (Logger.IsDebugEnabled)
+                {
+                    Logger.Debug("Disposed");
+                }
             }
         }
 

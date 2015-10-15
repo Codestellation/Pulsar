@@ -1,4 +1,5 @@
 ﻿using System;
+using Codestellation.Pulsar.Diagnostics;
 
 namespace Codestellation.Pulsar.Triggers
 {
@@ -7,6 +8,8 @@ namespace Codestellation.Pulsar.Triggers
     /// </summary>
     public abstract class AbstractTrigger : ITrigger
     {
+        private static readonly PulsarLogger Logger = PulsarLogManager.GetLogger<AbstractTrigger>();
+
         private TriggerCallback _callback;
         private bool _started;
 
@@ -21,6 +24,11 @@ namespace Codestellation.Pulsar.Triggers
                 throw new ArgumentNullException(nameof(callback));
             }
             _callback = callback;
+
+            if (Logger.IsInfoEnabled)
+            {
+                Logger.Info($"Started");
+            }
 
             OnStart();
             _started = true;
@@ -38,7 +46,13 @@ namespace Codestellation.Pulsar.Triggers
         /// </summary>
         public void Stop()
         {
+            _started = false;
             OnStop();
+
+            if (Logger.IsInfoEnabled)
+            {
+                Logger.Info("Stopped");
+            }
         }
 
         /// <summary>
@@ -55,6 +69,11 @@ namespace Codestellation.Pulsar.Triggers
         {
             if (_started)
             {
+                if (Logger.IsInfoEnabled)
+                {
+                    Logger.Info("Trigger callback invoked");
+                }
+
                 var context = new TriggerContext(this);
                 _callback(context);
             }

@@ -17,7 +17,7 @@ namespace Codestellation.Pulsar.Diagnostics
         public static readonly bool CanLogToConsole;
 
         /// <summary>
-        /// Gets or sets logger factory delegate. 
+        /// Gets or sets logger factory delegate.
         /// <remarks></remarks>
         /// </summary>
         public static Func<string, PulsarLogger> LoggerFactory
@@ -65,7 +65,15 @@ namespace Codestellation.Pulsar.Diagnostics
         /// <typeparam name="T">A type to create logger for</typeparam>
         public static PulsarLogger GetLogger<T>()
         {
-            return LoggerFactory(typeof(T).FullName);
+            return GetLogger(typeof(T));
+        }
+
+        /// <summary>
+        /// Returns new instance of <see cref="PulsarLogger"/>
+        /// </summary>
+        public static PulsarLogger GetLogger(Type type)
+        {
+            return LoggerFactory(type.FullName);
         }
 
         internal static void ConsoleWriteLine(PulsarLogger pulsarLogger, string level, string message)

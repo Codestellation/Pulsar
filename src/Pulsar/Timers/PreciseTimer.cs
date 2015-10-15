@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Codestellation.Pulsar.Diagnostics;
 using Codestellation.Pulsar.Misc;
 
 namespace Codestellation.Pulsar.Timers
@@ -12,6 +13,8 @@ namespace Codestellation.Pulsar.Timers
     [DebuggerDisplay("Next = {_nextStartAt}")]
     public class PreciseTimer : AbstractTimer
     {
+        private static readonly PulsarLogger Logger = PulsarLogManager.GetLogger<PreciseTimer>();
+
         private static readonly TimeSpan MaxTimerInterval = TimeSpan.FromMinutes(1);
 
         private DateTime _firstStartAt;
@@ -50,6 +53,11 @@ namespace Codestellation.Pulsar.Timers
                     OnInternalTimerFired();
                 }
                 return;
+            }
+
+            if (Logger.IsDebugEnabled)
+            {
+                Logger.Debug($"Fire after {fireAfter}");
             }
 
             SetupInternalTimer(fireAfter, TimeSpan.Zero);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Codestellation.Pulsar.Diagnostics;
 
 namespace Codestellation.Pulsar.Misc
 {
@@ -7,6 +8,7 @@ namespace Codestellation.Pulsar.Misc
     /// </summary>
     public static class Clock
     {
+        private static readonly PulsarLogger Logger = PulsarLogManager.GetLogger(typeof(Clock));
         private static readonly Func<DateTime> DefaultUtcNow;
         private static Func<DateTime> _utcNow = DefaultUtcNow;
 
@@ -40,6 +42,8 @@ namespace Codestellation.Pulsar.Misc
                 {
                     throw new ArgumentException("Delegate must return UTC date time", nameof(value));
                 }
+
+                Logger.Info("Clock function changed");
 
                 _utcNow = value;
             }

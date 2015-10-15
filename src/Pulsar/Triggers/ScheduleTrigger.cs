@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Codestellation.Pulsar.Diagnostics;
 using Codestellation.Pulsar.Timers;
 
 namespace Codestellation.Pulsar.Triggers
@@ -10,6 +11,8 @@ namespace Codestellation.Pulsar.Triggers
     [DebuggerDisplay("Next = {NextFireAt}")]
     public class ScheduleTrigger : TimerTrigger
     {
+        private static readonly PulsarLogger Logger = PulsarLogManager.GetLogger<ScheduleTrigger>();
+
         private readonly ISchedule _calculator;
 
         /// <summary>
@@ -60,9 +63,15 @@ namespace Codestellation.Pulsar.Triggers
         /// </summary>
         protected override void OnStart()
         {
-            if (NextFireAt.HasValue)
+            DateTime? nextFireAt = NextFireAt;
+            if (nextFireAt.HasValue)
             {
-                SetupTimer(NextFireAt.Value);
+                SetupTimer(nextFireAt.Value);
+            }
+
+            if (Logger.IsInfoEnabled)
+            {
+                Logger.Debug($"Next fire at is {nextFireAt}");
             }
         }
     }
