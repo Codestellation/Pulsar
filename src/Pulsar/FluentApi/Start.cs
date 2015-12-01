@@ -56,7 +56,7 @@ namespace Codestellation.Pulsar.FluentApi
         {
             if (timeSpan <= TimeSpan.Zero)
             {
-                throw new ArgumentOutOfRangeException(nameof(timeSpan), "Should be greater than TimeSpan.Zero");
+                return Clock.UtcNow;
             }
 
             return Clock.UtcNow + timeSpan;
