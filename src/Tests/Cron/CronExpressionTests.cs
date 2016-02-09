@@ -30,6 +30,21 @@ namespace Codestellation.Pulsar.Tests.Cron
             Assert.That(nearest.Value, Is.EqualTo(expected));
         }
 
+        [TestCase("0 15 0 1/1 * ? *", "2016-02-09T00:00:00", "2016-02-09T00:15:00")]
+        [TestCase("0 15 0 1/1 * ? *", "2016-02-09T00:20:00", "2016-02-10T00:15:00")]
+        public void Should_correctly_show_nearest_occurrence(string expressionString, string nowString, string expectedString)
+        {
+            var now = DateTime.Parse(nowString);
+
+            var expression = new CronExpression(expressionString);
+
+            var nearest = expression.NearestAfter(now);
+
+            var expected = DateTime.Parse(expectedString);
+
+            Assert.That(nearest.Value, Is.EqualTo(expected));
+        }
+
         [TestCase(1, 2012)]
         [TestCase(12, 2013)]
         public void Should_correctly_show_nearest_occurence2(int currentMonth, int expectedYear)

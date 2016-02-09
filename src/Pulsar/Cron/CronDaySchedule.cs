@@ -22,7 +22,7 @@ namespace Codestellation.Pulsar.Cron
             _second = second;
             _minute = minute;
             _hour = hour;
-            _timeSpan = new TimeSpan(_hour.MinValue, _second.MinValue, _minute.MinValue);
+            _timeSpan = new TimeSpan(_hour.MinValue, _minute.MinValue, _second.MinValue);
         }
 
         public IEnumerable<TimeSpan> Values
