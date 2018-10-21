@@ -1,96 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EFE5D3A0-3C2A-4711-A2D9-8E945CF1A8CC}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Codestellation.Pulsar</RootNamespace>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Jury Soldatenkov</Authors>
+    <Company>Codestellation Team</Company>
+    <PackageId>Codestellation.Pulsar</PackageId>
+    <PackageProjectUrl>https://github.com/codestellation/Pulsar</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/codestellation/Pulsar</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AssemblyName>Codestellation.Pulsar</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile151</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <RootNamespace>Codestellation.Pulsar</RootNamespace>
+    <NoWarn>7035</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Codestellation.Pulsar.XML</DocumentationFile>
+
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Codestellation.Pulsar.XML</DocumentationFile>
-  </PropertyGroup>
+
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
+    <PackageReference Include="Codestellation.Cepheid" Version="0.1.2" PrivateAssets="All" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\SolutionVersion.cs">
-      <Link>Properties\SolutionVersion.cs</Link>
-    </Compile>
-    <Compile Include="Diagnostics\LogSettings.cs" />
-    <Compile Include="Diagnostics\PulsarLogger.cs" />
-    <Compile Include="Diagnostics\PulsarLogManager.cs" />
-    <Compile Include="FluentApi\Repeat.cs" />
-    <Compile Include="FluentApi\SchedulerExtensions.cs" />
-    <Compile Include="FluentApi\Start.cs" />
-    <Compile Include="Cron\CronCalendar.cs" />
-    <Compile Include="Cron\CronCalendarBuilder.cs" />
-    <Compile Include="Cron\CronDateHelper.cs" />
-    <Compile Include="Cron\CronDaySchedule.cs" />
-    <Compile Include="Cron\CronExpression.cs" />
-    <Compile Include="Cron\CronFieldSettings.cs" />
-    <Compile Include="Cron\CronParser.cs" />
-    <Compile Include="Cron\CronSymbols.cs" />
-    <Compile Include="Cron\DayOfMonthField.cs" />
-    <Compile Include="Cron\DayOfWeekField.cs" />
-    <Compile Include="Cron\IntegerIndex.cs" />
-    <Compile Include="Cron\SimpleCronField.cs" />
-    <Compile Include="IScheduler.cs" />
-    <Compile Include="ISchedulerController.cs" />
-    <Compile Include="ITask.cs" />
-    <Compile Include="ITrigger.cs" />
-    <Compile Include="Misc\Clock.cs" />
-    <Compile Include="Schedulers\PulsarScheduler.cs" />
-    <Compile Include="Schedulers\SchedulerTask.cs" />
-    <Compile Include="TaskOptions.cs" />
-    <Compile Include="Timers\AbstractTimer.cs" />
-    <Compile Include="Timers\ITimer.cs" />
-    <Compile Include="Timers\PreciseTimer.cs" />
-    <Compile Include="Timers\SimpleTimer.cs" />
-    <Compile Include="Timers\StubTimer.cs" />
-    <Compile Include="Cron\CronExpressionBuilder.cs" />
-    <Compile Include="Triggers\CronSchedule.cs" />
-    <Compile Include="Triggers\ISchedule.cs" />
-    <Compile Include="Triggers\TriggerCallback.cs" />
-    <Compile Include="Triggers\TriggerContext.cs" />
-    <Compile Include="Triggers\AbstractTrigger.cs" />
-    <Compile Include="Triggers\ScheduleTrigger.cs" />
-    <Compile Include="Triggers\ManualTrigger.cs" />
-    <Compile Include="Triggers\SimpleTimerTrigger.cs" />
-    <Compile Include="Triggers\TimerTrigger.cs" />
-    <Compile Include="Triggers\WeeklySchedule.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
