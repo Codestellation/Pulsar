@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using Codestellation.Pulsar.Misc;
 using Codestellation.Pulsar.Timers;
@@ -50,6 +50,8 @@ namespace Codestellation.Pulsar.Tests.Timers
 
             //then
             counter.Wait(TimeSpan.FromSeconds(1));
+            counter.Wait(TimeSpan.FromSeconds(1)); // To ensure nothing's gonna happen after the first time.  
+            
             Assert.That(counter.CurrentCount, Is.EqualTo(9));
         }
 
